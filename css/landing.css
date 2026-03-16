@@ -73,8 +73,19 @@ body {
 }
 
 .pres-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0,120,212,0.15);
+  transform: translateY(-8px) scale(1.01);
+  box-shadow: 0 16px 48px rgba(0,120,212,0.25);
+}
+
+.pres-card:hover .card-banner {
+  background: linear-gradient(135deg, var(--ms-blue) 0%, var(--ms-light-blue) 100%);
+}
+
+.pres-card:focus-visible {
+  outline: 2px solid var(--ms-light-blue);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px rgba(80,230,255,0.6),
+              0 8px 30px rgba(0,120,212,0.25);
 }
 
 .pres-card .card-banner {
@@ -140,6 +151,16 @@ body {
   font-size: 0.85em;
   border-top: 1px solid #EDEBE9;
   margin-top: 60px;
+}
+
+.landing-footer a {
+  color: var(--ms-blue);
+  text-decoration: none;
+}
+
+.landing-footer a:hover,
+.landing-footer a:focus-visible {
+  text-decoration: underline;
 }
 
 /* Responsive */

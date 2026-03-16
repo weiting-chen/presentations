@@ -3,7 +3,7 @@
 /* ========================================
    Font & Base
    ======================================== */
-@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+/* System Segoe UI — no external webfont needed for Microsoft typography */
 
 :root {
   --ms-blue: #0078D4;
@@ -42,8 +42,13 @@
   box-sizing: border-box;
   height: 100%;
   color: var(--ms-gray-130);
-  font-size: 18px;
-  line-height: 1.6;
+  font-size: 17px;
+  line-height: 1.65;
+  font-weight: 300;
+}
+
+.reveal .slides section strong {
+  font-weight: 600;
 }
 
 .reveal .slides section.center-content {
@@ -67,19 +72,21 @@
 }
 
 .reveal .slides section.title-slide h1 {
-  font-size: 2.4em;
-  font-weight: 700;
-  line-height: 1.2;
-  margin-bottom: 20px;
+  font-size: 2.6em;
+  font-weight: 600;
+  line-height: 1.15;
+  margin-bottom: 24px;
   color: var(--ms-white);
-  text-shadow: none;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  letter-spacing: -0.03em;
 }
 
 .reveal .slides section.title-slide .subtitle {
-  font-size: 1.2em;
-  font-weight: 300;
-  opacity: 0.9;
+  font-size: 1.3em;
+  font-weight: 400;
+  opacity: 0.92;
   margin-bottom: 40px;
+  line-height: 1.4;
 }
 
 .reveal .slides section.title-slide .meta {
@@ -92,28 +99,45 @@
    Section Divider Slide
    ======================================== */
 .reveal .slides section.section-divider {
-  background: linear-gradient(135deg, var(--ms-blue), var(--ms-accent-purple));
+  background: linear-gradient(135deg, var(--ms-blue) 0%, var(--ms-accent-purple) 100%);
   color: var(--ms-white);
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 60px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.reveal .slides section.section-divider::before {
+  content: '';
+  position: absolute;
+  right: -100px;
+  bottom: -100px;
+  width: 400px;
+  height: 400px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
 }
 
 .reveal .slides section.section-divider h2 {
-  font-size: 2.2em;
-  font-weight: 700;
+  font-size: 2.4em;
+  font-weight: 600;
   color: var(--ms-white);
   margin-bottom: 10px;
+  letter-spacing: -0.03em;
+  border-bottom: none;
 }
 
 .reveal .slides section.section-divider .section-number {
-  font-size: 5em;
+  font-size: 12em;
   font-weight: 700;
-  opacity: 0.15;
+  opacity: 0.08;
   position: absolute;
-  right: 60px;
-  top: 40px;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  line-height: 1;
 }
 
 .reveal .slides section.section-divider .section-desc {
@@ -134,13 +158,14 @@
 }
 
 .reveal h2 {
-  font-size: 1.8em;
-  font-weight: 700;
-  margin-bottom: 0.6em;
+  font-size: 2em;
+  font-weight: 600;
+  margin-bottom: 0.8em;
   color: var(--ms-blue);
-  border-bottom: 3px solid var(--ms-blue);
-  padding-bottom: 10px;
-  display: inline-block;
+  border-bottom: 4px solid var(--ms-blue);
+  padding-bottom: 12px;
+  display: block;
+  letter-spacing: -0.02em;
 }
 
 .reveal h3 {
@@ -185,7 +210,7 @@
   border-collapse: separate;
   border-spacing: 0;
   margin: 15px 0;
-  font-size: 0.85em;
+  font-size: 0.95em;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
@@ -248,7 +273,7 @@
   color: #D4D4D4;
   border-radius: 8px;
   padding: 20px;
-  font-size: 0.75em;
+  font-size: 0.85em;
   line-height: 1.5;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   width: 100%;
@@ -289,8 +314,9 @@
 }
 
 .metric-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0,120,212,0.12);
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(0,120,212,0.2);
+  border-color: var(--ms-blue);
 }
 
 .metric-card .metric-value {
@@ -358,6 +384,12 @@
   height: 16px;
   left: -28px;
   top: 4px;
+  animation: milestone-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes milestone-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px var(--ms-accent-green); }
+  50% { box-shadow: 0 0 0 6px rgba(0, 204, 106, 0.3); }
 }
 
 .timeline-date {
@@ -390,18 +422,25 @@
 
 .comparison-card.highlight {
   border-color: var(--ms-blue);
-  box-shadow: 0 4px 16px rgba(0,120,212,0.12);
+  border-width: 3px;
+  box-shadow: 0 8px 24px rgba(0,120,212,0.18);
+  background: linear-gradient(135deg, #FFFFFF 0%, #F5FAFF 100%);
+  transform: scale(1.03);
+  position: relative;
 }
 
 .comparison-card h4 {
   margin-top: 0;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
   border-bottom: 2px solid var(--ms-gray-30);
+  font-size: 1.15em;
 }
 
 .comparison-card.highlight h4 {
   color: var(--ms-blue);
   border-bottom-color: var(--ms-blue);
+  border-bottom-width: 3px;
+  font-weight: 600;
 }
 
 /* ========================================
@@ -493,6 +532,13 @@
 
 .reveal .progress span {
   background: linear-gradient(90deg, var(--ms-blue), var(--ms-light-blue));
+  background-size: 200% 100%;
+  animation: progress-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes progress-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 /* ========================================
@@ -619,6 +665,29 @@
   transform: scale(1);
 }
 
+/* Fluent Accent System */
+.accent-left {
+  border-left: 5px solid var(--ms-blue);
+  padding-left: 20px;
+  margin-left: 0;
+}
+
+.accent-left.green { border-left-color: var(--ms-accent-green); }
+.accent-left.purple { border-left-color: var(--ms-accent-purple); }
+.accent-left.orange { border-left-color: var(--ms-accent-orange); }
+.accent-left.red { border-left-color: var(--ms-accent-red); }
+
+/* Global Link Styling */
+.reveal a {
+  color: var(--ms-blue);
+  text-decoration: none;
+}
+
+.reveal a:hover,
+.reveal a:focus-visible {
+  text-decoration: underline;
+}
+
 /* ========================================
    Print / PDF
    ======================================== */
@@ -639,12 +708,12 @@
 @media (max-width: 768px) {
   .reveal .slides section {
     padding: 20px 30px;
-    font-size: 14px;
+    font-size: 16px;
   }
   .two-col, .comparison-grid {
     grid-template-columns: 1fr;
   }
   .metric-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }

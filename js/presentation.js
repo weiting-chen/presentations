@@ -18,17 +18,21 @@ const PresentationFramework = {
    */
   addKeyboardShortcuts() {
     document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      const targetTag = (e.target.tagName || '').toLowerCase();
+      if (targetTag === 'input' || targetTag === 'textarea') return;
+
+      const key = (e.key || '').toLowerCase();
+
       // 'H' key: go to first slide (home)
-      if (e.key === 'h' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-          Reveal.slide(0);
-        }
+      if (key === 'h') {
+        Reveal.slide(0);
       }
+
       // 'T' key: toggle overview / table of contents
-      if (e.key === 't' && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-          Reveal.toggleOverview();
-        }
+      if (key === 't') {
+        Reveal.toggleOverview();
       }
     });
   },
