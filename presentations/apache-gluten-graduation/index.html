@@ -767,6 +767,42 @@
         </div>
       </section>
 
+      <section>
+        <h2>⚖️ PMC &amp; Committer Rights — Voting Rules</h2>
+        <p>Understanding your rights and influence at each level of the Apache project:</p>
+        <table style="font-size:0.85em;">
+          <thead>
+            <tr><th>Scenario</th><th>Who Votes</th><th>Binding?</th><th>Rule</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Code Change (PR merge)</strong></td><td>Committers &amp; PMC</td><td>Committer: ✅ Binding</td><td>Lazy consensus — 1 binding "+1", no "-1" within 72 h</td></tr>
+            <tr><td><strong>Software Release</strong></td><td>PMC</td><td>PMC only: ✅ Binding</td><td>Majority approval — at least <strong>3 binding "+1"</strong> and more "+1" than "-1"</td></tr>
+            <tr><td><strong>New Committer Nomination</strong></td><td>PMC</td><td>PMC only: ✅ Binding</td><td>Lazy consensus on private@ — any PMC "-1" is a veto</td></tr>
+            <tr><td><strong>New PMC Member</strong></td><td>PMC</td><td>PMC only: ✅ Binding</td><td>Lazy consensus on private@ — requires IPMC/Board notification</td></tr>
+            <tr><td><strong>Technical Direction / Design</strong></td><td>Anyone (dev@)</td><td>Committer/PMC: ✅ Binding</td><td>Lazy consensus — community discussion encouraged</td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:15px; display:flex; gap:20px;">
+          <div style="flex:1; background:#F3F2F1; border-radius:8px; padding:15px;">
+            <strong>🧑‍💻 Committer</strong>
+            <ul style="font-size:0.9em; margin-top:8px;">
+              <li>Merge PRs (write access)</li>
+              <li>Binding vote on code changes</li>
+              <li>Propose technical directions</li>
+            </ul>
+          </div>
+          <div style="flex:1; background:#E8F4FD; border-radius:8px; padding:15px;">
+            <strong>🏛️ PMC Member</strong>
+            <ul style="font-size:0.9em; margin-top:8px;">
+              <li>All committer rights, <strong>plus:</strong></li>
+              <li>Binding vote on <strong>releases</strong></li>
+              <li>Vote on new committers &amp; PMC members</li>
+              <li>Manage project governance &amp; brand</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
       <!-- ============================================================ -->
       <!-- SECTION 12: ROADMAP -->
       <!-- ============================================================ -->
@@ -783,13 +819,13 @@
         <p><em>Platform &amp; Version Coverage</em></p>
         <table>
           <thead>
-            <tr><th>Initiative</th><th>Description</th></tr>
+            <tr><th>Initiative</th><th>Description</th><th>Contribute?</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>Spark 4.0 Full Support</strong></td><td>First-class support for the next major Spark release</td></tr>
-            <tr><td><strong>PySpark &amp; Arrow UDF</strong></td><td>Native Python UDFs — broadening the audience</td></tr>
-            <tr><td><strong>Full Datalake Support</strong></td><td>Extended JSON, Iceberg, Hudi, Delta support</td></tr>
-            <tr><td><strong>GPU / FPGA / ARM</strong></td><td>Heterogeneous hardware accelerator support</td></tr>
+            <tr><td><strong>Spark 4.0 Full Support</strong></td><td>First-class support for the next major Spark release</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
+            <tr><td><strong>PySpark &amp; Arrow UDF</strong></td><td>Native Python UDFs — broadening the audience</td><td></td></tr>
+            <tr><td><strong>Full Datalake Support</strong></td><td>Extended JSON, Iceberg, Hudi, Delta support</td><td></td></tr>
+            <tr><td><strong>GPU / ARM Support</strong></td><td>Heterogeneous hardware accelerator support</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
           </tbody>
         </table>
       </section>
@@ -800,13 +836,13 @@
         <blockquote>Right now, one Spark task = one CPU core. Imagine using all 32 cores per task. That's the future we're building.</blockquote>
         <table>
           <thead>
-            <tr><th>Initiative</th><th>Description</th></tr>
+            <tr><th>Initiative</th><th>Description</th><th>Contribute?</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>Multi-Core per Task</strong></td><td>Native parallelism within Spark executors</td></tr>
-            <tr><td><strong>Spill Optimization</strong></td><td>Better off-heap spill strategies</td></tr>
-            <tr><td><strong>Hash Table Broadcast</strong></td><td>Optimized broadcast join via native hash tables</td></tr>
-            <tr><td><strong>Dictionary Shuffle</strong></td><td>Compressed shuffle for dictionary-encoded columns</td></tr>
+            <tr><td><strong>Multi-Core per Task</strong></td><td>Native parallelism within Spark executors</td><td></td></tr>
+            <tr><td><strong>Spill Optimization</strong></td><td>Better off-heap spill strategies</td><td></td></tr>
+            <tr><td><strong>Hash Table Broadcast</strong></td><td>Optimized broadcast join via native hash tables</td><td></td></tr>
+            <tr><td><strong>Dictionary Shuffle</strong></td><td>Compressed shuffle for dictionary-encoded columns</td><td></td></tr>
           </tbody>
         </table>
       </section>
@@ -816,20 +852,42 @@
         <p><em>Observability &amp; UX — Great performance means nothing if you can't debug it.</em></p>
         <table>
           <thead>
-            <tr><th>Initiative</th><th>Description</th></tr>
+            <tr><th>Initiative</th><th>Description</th><th>Contribute?</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>Query Trace</strong></td><td>Enhanced diagnostics and execution tracing</td></tr>
-            <tr><td><strong>ANSI SQL Coverage</strong></td><td>Broader ANSI SQL feature compliance</td></tr>
-            <tr><td><strong>Complex Types</strong></td><td>Better nested/complex data type support</td></tr>
-            <tr><td><strong>Scan Pushdown</strong></td><td>Filter/projection pushdown into remote storage</td></tr>
+            <tr><td><strong>Query Trace</strong></td><td>Enhanced diagnostics and execution tracing</td><td></td></tr>
+            <tr><td><strong>ANSI SQL Coverage</strong></td><td>Broader ANSI SQL feature compliance</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
+            <tr><td><strong>Complex Types</strong></td><td>Better nested/complex data type support</td><td></td></tr>
+            <tr><td><strong>Scan Pushdown</strong></td><td>Filter/projection pushdown into remote storage</td><td></td></tr>
           </tbody>
         </table>
         <h3 style="margin-top:15px;">Horizon: Beyond Spark</h3>
         <ul>
           <li><strong>Gluten + Flink + Velox</strong> — Proof-of-concept for Flink integration</li>
           <li><strong>DataFusion Backend</strong> — Rust-based execution as a third backend option</li>
+          <li><strong>Spark Streaming Support</strong> — Native acceleration for structured streaming workloads</li>
         </ul>
+      </section>
+
+      <section>
+        <h2>🎯 Easy Wins — Start Contributing Today</h2>
+        <p>These roadmap initiatives are <strong>great entry points</strong> — some also align directly with Microsoft Fabric goals:</p>
+        <table style="font-size:0.85em;">
+          <thead>
+            <tr><th>Initiative</th><th>Difficulty</th><th>Fabric Aligned?</th><th>Why It's a Good Start</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>🐛 Bug Fixes</strong></td><td>🟢 Easy</td><td>✅ Yes</td><td>Immediate impact, many <code>good-first-issue</code> tickets available</td></tr>
+            <tr><td><strong>🧪 UT Coverage</strong></td><td>🟢 Easy</td><td>✅ Yes</td><td>Add unit tests for untested code paths — learn the codebase fast</td></tr>
+            <tr><td><strong>📐 ANSI SQL Coverage</strong></td><td>🟡 Medium</td><td>✅ Yes</td><td>Implement missing ANSI functions — well-scoped, clear acceptance criteria</td></tr>
+            <tr><td><strong>⬆️ Spark Version Upgrade</strong></td><td>🟡 Medium</td><td>✅ Yes</td><td>Spark 4.0 support — API migration, compatibility testing</td></tr>
+            <tr><td><strong>📡 Spark Streaming</strong></td><td>🟡 Medium</td><td>✅ Yes</td><td>Extend native acceleration to streaming — high visibility initiative</td></tr>
+            <tr><td><strong>💪 GPU / ARM Support</strong></td><td>🔴 Advanced</td><td>✅ Yes</td><td>Heterogeneous compute — deep systems work with outsized impact</td></tr>
+          </tbody>
+        </table>
+        <blockquote style="margin-top:12px;">
+          <strong>Tip:</strong> Bug fixes and UT coverage are the fastest path to your first merged PR. Pick one, ship it, and build momentum toward committership.
+        </blockquote>
       </section>
 
       <section>
