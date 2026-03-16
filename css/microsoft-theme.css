@@ -24,8 +24,6 @@
   --ms-white: #FFFFFF;
   --ms-gradient-start: #0078D4;
   --ms-gradient-end: #50E6FF;
-  --slide-width: 100%;
-  --slide-height: 100%;
 }
 
 .reveal-viewport {
@@ -40,7 +38,6 @@
   text-align: left;
   padding: 40px 60px;
   box-sizing: border-box;
-  height: 100%;
   color: var(--ms-gray-130);
   font-size: 17px;
   line-height: 1.65;
@@ -52,9 +49,20 @@
 }
 
 .reveal .slides section.center-content {
+  text-align: center;
+}
+
+
+/* Inner wrapper for flex centering (flex must NOT be on <section>) */
+.slide-inner-center {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 100%;
+  min-height: 580px;
+}
+
+.slide-inner-center.align-center {
   align-items: center;
   text-align: center;
 }
@@ -63,11 +71,7 @@
    Title Slide
    ======================================== */
 .reveal .slides section.title-slide {
-  background: linear-gradient(135deg, var(--ms-gradient-start), var(--ms-dark-blue));
   color: var(--ms-white);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   padding: 60px 80px;
 }
 
@@ -99,25 +103,8 @@
    Section Divider Slide
    ======================================== */
 .reveal .slides section.section-divider {
-  background: linear-gradient(135deg, var(--ms-blue) 0%, var(--ms-accent-purple) 100%);
   color: var(--ms-white);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   padding: 60px 80px;
-  position: relative;
-  overflow: hidden;
-}
-
-.reveal .slides section.section-divider::before {
-  content: '';
-  position: absolute;
-  right: -100px;
-  bottom: -100px;
-  width: 400px;
-  height: 400px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 50%;
 }
 
 .reveal .slides section.section-divider h2 {
@@ -130,7 +117,7 @@
 }
 
 .reveal .slides section.section-divider .section-number {
-  font-size: 12em;
+  font-size: 10em;
   font-weight: 700;
   opacity: 0.08;
   position: absolute;
@@ -628,12 +615,7 @@
    Ending Slide
    ======================================== */
 .reveal .slides section.ending-slide {
-  background: linear-gradient(135deg, var(--ms-dark-blue), var(--ms-blue));
   color: var(--ms-white);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   text-align: center;
 }
 
