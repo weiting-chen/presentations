@@ -1,0 +1,650 @@
+/* Microsoft-Style Presentation Theme for Reveal.js */
+
+/* ========================================
+   Font & Base
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+
+:root {
+  --ms-blue: #0078D4;
+  --ms-dark-blue: #003D6B;
+  --ms-light-blue: #50E6FF;
+  --ms-accent-green: #00CC6A;
+  --ms-accent-purple: #886CE4;
+  --ms-accent-orange: #FF8C00;
+  --ms-accent-red: #E74856;
+  --ms-gray-10: #FAF9F8;
+  --ms-gray-20: #F3F2F1;
+  --ms-gray-30: #EDEBE9;
+  --ms-gray-40: #D2D0CE;
+  --ms-gray-60: #A19F9D;
+  --ms-gray-90: #605E5C;
+  --ms-gray-130: #323130;
+  --ms-gray-150: #201F1E;
+  --ms-white: #FFFFFF;
+  --ms-gradient-start: #0078D4;
+  --ms-gradient-end: #50E6FF;
+  --slide-width: 100%;
+  --slide-height: 100%;
+}
+
+.reveal-viewport {
+  background: var(--ms-white);
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* ========================================
+   Slide Base
+   ======================================== */
+.reveal .slides section {
+  text-align: left;
+  padding: 40px 60px;
+  box-sizing: border-box;
+  height: 100%;
+  color: var(--ms-gray-130);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.reveal .slides section.center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* ========================================
+   Title Slide
+   ======================================== */
+.reveal .slides section.title-slide {
+  background: linear-gradient(135deg, var(--ms-gradient-start), var(--ms-dark-blue));
+  color: var(--ms-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 80px;
+}
+
+.reveal .slides section.title-slide h1 {
+  font-size: 2.4em;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  color: var(--ms-white);
+  text-shadow: none;
+}
+
+.reveal .slides section.title-slide .subtitle {
+  font-size: 1.2em;
+  font-weight: 300;
+  opacity: 0.9;
+  margin-bottom: 40px;
+}
+
+.reveal .slides section.title-slide .meta {
+  font-size: 0.9em;
+  opacity: 0.75;
+  margin-top: auto;
+}
+
+/* ========================================
+   Section Divider Slide
+   ======================================== */
+.reveal .slides section.section-divider {
+  background: linear-gradient(135deg, var(--ms-blue), var(--ms-accent-purple));
+  color: var(--ms-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 80px;
+}
+
+.reveal .slides section.section-divider h2 {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: var(--ms-white);
+  margin-bottom: 10px;
+}
+
+.reveal .slides section.section-divider .section-number {
+  font-size: 5em;
+  font-weight: 700;
+  opacity: 0.15;
+  position: absolute;
+  right: 60px;
+  top: 40px;
+}
+
+.reveal .slides section.section-divider .section-desc {
+  font-size: 1.1em;
+  font-weight: 300;
+  opacity: 0.85;
+  max-width: 600px;
+}
+
+/* ========================================
+   Headings
+   ======================================== */
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--ms-gray-150);
+  text-transform: none;
+  letter-spacing: -0.02em;
+}
+
+.reveal h2 {
+  font-size: 1.8em;
+  font-weight: 700;
+  margin-bottom: 0.6em;
+  color: var(--ms-blue);
+  border-bottom: 3px solid var(--ms-blue);
+  padding-bottom: 10px;
+  display: inline-block;
+}
+
+.reveal h3 {
+  font-size: 1.3em;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  color: var(--ms-gray-130);
+}
+
+.reveal h4 {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--ms-gray-90);
+}
+
+/* ========================================
+   Blockquotes (used for callouts)
+   ======================================== */
+.reveal blockquote {
+  background: linear-gradient(135deg, #EBF3FB, #F0F6FF);
+  border-left: 5px solid var(--ms-blue);
+  padding: 20px 25px;
+  margin: 20px 0;
+  font-style: normal;
+  font-size: 1.05em;
+  color: var(--ms-dark-blue);
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 8px rgba(0, 120, 212, 0.08);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reveal blockquote strong {
+  color: var(--ms-blue);
+}
+
+/* ========================================
+   Tables
+   ======================================== */
+.reveal table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 15px 0;
+  font-size: 0.85em;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.reveal table thead th {
+  background: var(--ms-blue);
+  color: var(--ms-white);
+  font-weight: 600;
+  padding: 12px 16px;
+  text-align: left;
+  border: none;
+}
+
+.reveal table tbody td {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--ms-gray-30);
+  background: var(--ms-white);
+}
+
+.reveal table tbody tr:nth-child(even) td {
+  background: var(--ms-gray-10);
+}
+
+.reveal table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.reveal table tbody tr:hover td {
+  background: #EBF3FB;
+}
+
+/* ========================================
+   Lists
+   ======================================== */
+.reveal ul, .reveal ol {
+  margin-left: 0;
+  padding-left: 1.5em;
+}
+
+.reveal li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.reveal ul li::marker {
+  color: var(--ms-blue);
+}
+
+.reveal ol li::marker {
+  color: var(--ms-blue);
+  font-weight: 600;
+}
+
+/* ========================================
+   Code / Pre
+   ======================================== */
+.reveal pre {
+  background: var(--ms-gray-150);
+  color: #D4D4D4;
+  border-radius: 8px;
+  padding: 20px;
+  font-size: 0.75em;
+  line-height: 1.5;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.reveal code {
+  font-family: 'Cascadia Code', 'Consolas', 'Courier New', monospace;
+}
+
+.reveal p code, .reveal li code {
+  background: var(--ms-gray-20);
+  color: var(--ms-blue);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* ========================================
+   Metric Cards
+   ======================================== */
+.metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.metric-card {
+  background: var(--ms-white);
+  border: 1px solid var(--ms-gray-30);
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,120,212,0.12);
+}
+
+.metric-card .metric-value {
+  font-size: 2.2em;
+  font-weight: 700;
+  color: var(--ms-blue);
+  display: block;
+  line-height: 1.2;
+}
+
+.metric-card .metric-label {
+  font-size: 0.85em;
+  color: var(--ms-gray-90);
+  margin-top: 6px;
+  display: block;
+}
+
+.metric-card.green .metric-value { color: var(--ms-accent-green); }
+.metric-card.purple .metric-value { color: var(--ms-accent-purple); }
+.metric-card.orange .metric-value { color: var(--ms-accent-orange); }
+
+/* ========================================
+   Timeline
+   ======================================== */
+.timeline {
+  position: relative;
+  padding: 10px 0 10px 30px;
+  margin: 15px 0;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, var(--ms-blue), var(--ms-accent-purple));
+  border-radius: 3px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 16px;
+  padding-left: 20px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -26px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  background: var(--ms-blue);
+  border-radius: 50%;
+  border: 3px solid var(--ms-white);
+  box-shadow: 0 0 0 2px var(--ms-blue);
+}
+
+.timeline-item.milestone::before {
+  background: var(--ms-accent-green);
+  box-shadow: 0 0 0 2px var(--ms-accent-green);
+  width: 16px;
+  height: 16px;
+  left: -28px;
+  top: 4px;
+}
+
+.timeline-date {
+  font-weight: 700;
+  color: var(--ms-blue);
+  font-size: 0.9em;
+}
+
+.timeline-content {
+  color: var(--ms-gray-130);
+  font-size: 0.9em;
+}
+
+/* ========================================
+   Comparison Cards
+   ======================================== */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.comparison-card {
+  background: var(--ms-white);
+  border: 2px solid var(--ms-gray-30);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.comparison-card.highlight {
+  border-color: var(--ms-blue);
+  box-shadow: 0 4px 16px rgba(0,120,212,0.12);
+}
+
+.comparison-card h4 {
+  margin-top: 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--ms-gray-30);
+}
+
+.comparison-card.highlight h4 {
+  color: var(--ms-blue);
+  border-bottom-color: var(--ms-blue);
+}
+
+/* ========================================
+   Persona Cards
+   ======================================== */
+.persona-card {
+  background: var(--ms-white);
+  border-left: 4px solid var(--ms-blue);
+  border-radius: 0 12px 12px 0;
+  padding: 18px 22px;
+  margin: 12px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.persona-card.green { border-left-color: var(--ms-accent-green); }
+.persona-card.purple { border-left-color: var(--ms-accent-purple); }
+.persona-card.orange { border-left-color: var(--ms-accent-orange); }
+.persona-card.red { border-left-color: var(--ms-accent-red); }
+
+.persona-card h4 {
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+/* ========================================
+   Lesson Cards
+   ======================================== */
+.lesson-card {
+  background: linear-gradient(135deg, #FFF8E1, #FFF3CD);
+  border-left: 4px solid var(--ms-accent-orange);
+  border-radius: 0 8px 8px 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.lesson-card h4 {
+  color: var(--ms-accent-orange);
+  margin-top: 0;
+}
+
+/* ========================================
+   Value Proposition Box
+   ======================================== */
+.value-prop {
+  background: linear-gradient(135deg, #E8F5E9, #F1F8E9);
+  border: 2px solid var(--ms-accent-green);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 15px 0;
+}
+
+.value-prop .check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  font-size: 1em;
+}
+
+.value-prop .check-item::before {
+  content: '✅';
+  font-size: 1.1em;
+}
+
+/* ========================================
+   Footer / Branding
+   ======================================== */
+.slide-footer {
+  position: absolute;
+  bottom: 15px;
+  left: 60px;
+  right: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7em;
+  color: var(--ms-gray-60);
+  border-top: 1px solid var(--ms-gray-30);
+  padding-top: 8px;
+}
+
+/* ========================================
+   Progress Bar Override
+   ======================================== */
+.reveal .progress {
+  height: 4px;
+  background: var(--ms-gray-30);
+}
+
+.reveal .progress span {
+  background: linear-gradient(90deg, var(--ms-blue), var(--ms-light-blue));
+}
+
+/* ========================================
+   Controls Override
+   ======================================== */
+.reveal .controls .navigate-left,
+.reveal .controls .navigate-right,
+.reveal .controls .navigate-up,
+.reveal .controls .navigate-down {
+  color: var(--ms-blue);
+}
+
+/* ========================================
+   Slide Number
+   ======================================== */
+.reveal .slide-number {
+  background: var(--ms-blue);
+  color: var(--ms-white);
+  font-size: 14px;
+  padding: 5px 12px;
+  border-radius: 4px 0 0 0;
+  font-weight: 600;
+}
+
+/* ========================================
+   Two Column Layout
+   ======================================== */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin: 15px 0;
+}
+
+.three-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+/* ========================================
+   Architecture Diagram
+   ======================================== */
+.arch-diagram {
+  background: var(--ms-gray-10);
+  border: 2px solid var(--ms-gray-30);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.arch-layer {
+  background: var(--ms-white);
+  border: 2px solid var(--ms-blue);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 8px 0;
+  font-weight: 600;
+  text-align: center;
+}
+
+.arch-layer.native {
+  background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+  border-color: var(--ms-accent-green);
+}
+
+.arch-layer.gluten {
+  background: linear-gradient(135deg, #EBF3FB, #D6E8F7);
+  border-color: var(--ms-blue);
+}
+
+.arch-layer.spark {
+  background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+  border-color: var(--ms-accent-orange);
+}
+
+.arch-arrow {
+  text-align: center;
+  font-size: 1.5em;
+  color: var(--ms-gray-60);
+  margin: 4px 0;
+}
+
+/* ========================================
+   Ending Slide
+   ======================================== */
+.reveal .slides section.ending-slide {
+  background: linear-gradient(135deg, var(--ms-dark-blue), var(--ms-blue));
+  color: var(--ms-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.ending-slide h2 {
+  color: var(--ms-white) !important;
+  border-bottom-color: var(--ms-light-blue) !important;
+  font-size: 2em;
+}
+
+.ending-slide a {
+  color: var(--ms-light-blue);
+  text-decoration: none;
+}
+
+.ending-slide a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   Animations
+   ======================================== */
+.reveal .slides section .fragment.grow-in {
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+.reveal .slides section .fragment.grow-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ========================================
+   Print / PDF
+   ======================================== */
+@media print {
+  .reveal .slides section {
+    page-break-after: always;
+  }
+  .reveal .progress,
+  .reveal .controls,
+  .reveal .slide-number {
+    display: none !important;
+  }
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+@media (max-width: 768px) {
+  .reveal .slides section {
+    padding: 20px 30px;
+    font-size: 14px;
+  }
+  .two-col, .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+  .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

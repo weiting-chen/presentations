@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>From Incubation to Top‑Level Project: How Apache Gluten Graduated</title>
+
+  <!-- Reveal.js from CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+  <!-- Microsoft Theme Override -->
+  <link rel="stylesheet" href="../../css/microsoft-theme.css">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ============================================================ -->
+      <!-- TITLE SLIDE -->
+      <!-- ============================================================ -->
+      <section class="title-slide" data-section="title">
+        <h1>From Incubation to<br>Top‑Level Project</h1>
+        <p class="subtitle">How Apache Gluten Graduated — and What It Means for Contributors</p>
+        <div class="meta">
+          <p>Weiting Chen · Apache Gluten PMC · March 2026</p>
+          <p style="margin-top:8px; opacity:0.6;">Press <kbd style="background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:4px;">→</kbd> to navigate · <kbd style="background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:4px;">T</kbd> for overview · <kbd style="background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:4px;">F</kbd> for fullscreen</p>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- AGENDA -->
+      <!-- ============================================================ -->
+      <section data-section="agenda">
+        <h2>Agenda</h2>
+        <div class="two-col">
+          <div>
+            <ol>
+              <li><strong>Opening</strong> — Why This Talk Matters</li>
+              <li><strong>The Problem</strong> — Spark's Performance Ceiling</li>
+              <li><strong>Genesis</strong> — History &amp; Motivation</li>
+              <li><strong>Architecture</strong> — How Gluten Works</li>
+              <li><strong>Incubation Journey</strong> — Milestones &amp; Lessons</li>
+              <li><strong>Graduation Day</strong> — Becoming a TLP</li>
+              <li><strong>Competitive Landscape</strong> — Why Gluten?</li>
+            </ol>
+          </div>
+          <div>
+            <ol start="8">
+              <li><strong>Current Status</strong> — By the Numbers</li>
+              <li><strong>Industry Adoption</strong> — Real-World Impact</li>
+              <li><strong>Becoming a Committer</strong> — The Apache Way</li>
+              <li><strong>Committer Criteria</strong> — Gluten vs. Spark vs. Velox</li>
+              <li><strong>Roadmap</strong> — Three Big Bets for 2026</li>
+              <li><strong>Contribute</strong> — Paths for Every Persona</li>
+              <li><strong>Q &amp; A</strong></li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 1: OPENING -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="opening">
+        <span class="section-number">01</span>
+        <h2>Opening</h2>
+        <p class="section-desc">Why This Talk Matters</p>
+      </section>
+
+      <section>
+        <h2>What if…</h2>
+        <blockquote>
+          <strong>What if you could make your Spark jobs 4× faster tomorrow — without changing a single line of code?</strong>
+        </blockquote>
+        <p style="margin-top:20px;">That's not a sales pitch. That's <strong>Apache Gluten</strong>.</p>
+        <p>On <strong>February 18, 2026</strong>, the Apache Software Foundation announced that Apache Gluten graduated from incubation and became a <strong>Top-Level Project (TLP)</strong> — alongside Apache Polaris, signaling a new era for lakehouse-native performance.</p>
+
+        <h3 style="margin-top:25px;">Why should you care?</h3>
+        <ul>
+          <li><strong>Spark user?</strong> Gluten can speed up your jobs 2–6× with zero code changes.</li>
+          <li><strong>Contributor?</strong> A newly graduated project actively growing its committer base — outsized impact.</li>
+          <li><strong>Care about open data?</strong> Native performance without vendor lock-in.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>This Talk Is Three Things</h2>
+        <div class="three-col" style="margin-top:30px;">
+          <div class="metric-card">
+            <span class="metric-value">🔧</span>
+            <span class="metric-label" style="font-size:1.1em; font-weight:600; color:#323130;">The Technical Story</span>
+            <p style="margin-top:10px; color:#605E5C;">How Gluten works and why it's fast</p>
+          </div>
+          <div class="metric-card green">
+            <span class="metric-value">🌍</span>
+            <span class="metric-label" style="font-size:1.1em; font-weight:600; color:#323130;">The Community Story</span>
+            <p style="margin-top:10px; color:#605E5C;">How we graduated in just 2 years</p>
+          </div>
+          <div class="metric-card purple">
+            <span class="metric-value">🚀</span>
+            <span class="metric-label" style="font-size:1.1em; font-weight:600; color:#323130;">The Opportunity Story</span>
+            <p style="margin-top:10px; color:#605E5C;">Why now is the best time to get involved</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 2: THE PROBLEM -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="problem">
+        <span class="section-number">02</span>
+        <h2>The Problem</h2>
+        <p class="section-desc">Spark's Performance Ceiling</p>
+      </section>
+
+      <section>
+        <h2>Spark Is the Default — But Not Free</h2>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-value">30M+</span>
+            <span class="metric-label">Monthly Maven Downloads</span>
+          </div>
+          <div class="metric-card green">
+            <span class="metric-value">1,000+</span>
+            <span class="metric-label">Companies in Production</span>
+          </div>
+          <div class="metric-card purple">
+            <span class="metric-value">2,000+</span>
+            <span class="metric-label">Community Contributors</span>
+          </div>
+        </div>
+        <p style="margin-top:25px;">Yet many teams hit a <strong>CPU and cost wall</strong>: clusters scale out, bills go up, SLAs barely move.</p>
+        <blockquote>If you've ever watched a Spark job crawl while your CPUs sit at 40% utilization, you've felt this pain.</blockquote>
+      </section>
+
+      <section>
+        <h2>The JVM Hits the Wall</h2>
+        <p><strong>Whole-Stage CodeGen</strong> (Spark 2.0) gave ~2× — but gains plateaued.</p>
+        <table>
+          <thead>
+            <tr><th>JVM Limitation</th><th>Impact</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>🚫 No SIMD Vectorization</td><td>Modern CPUs process 8–16 values/instruction — JVM can't use this</td></tr>
+            <tr><td>⏸️ GC Pauses</td><td>10–100ms pauses at scale = wasted time</td></tr>
+            <tr><td>🔗 Memory Indirection</td><td>Object headers, pointer chasing = cache misses</td></tr>
+            <tr><td>📦 Serialization Overhead</td><td>Data conversion between internal formats</td></tr>
+          </tbody>
+        </table>
+        <p style="margin-top:15px;">Native engines like ClickHouse and Velox leave the JVM in the dust — <strong>2× to 10× faster</strong> on the same hardware.</p>
+      </section>
+
+      <section>
+        <h2>The Trade-Off Dilemma</h2>
+        <div class="arch-diagram">
+          <div class="arch-layer spark">🟠 Apache Spark — Scalability, Ecosystem, APIs (JVM-based)</div>
+          <div class="arch-arrow">⬍ &nbsp; Gap: Can we bridge this? &nbsp; ⬍</div>
+          <div class="arch-layer native">🟢 Native SQL Engines — Raw Performance (Velox, ClickHouse)</div>
+        </div>
+        <blockquote style="margin-top:20px;">
+          Can we keep Spark's ecosystem while running like a native engine — <strong>without rewriting a single query?</strong><br><br>
+          <strong style="font-size:1.2em;">Apache Gluten is our "yes" to that question.</strong>
+        </blockquote>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 3: GENESIS -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="genesis">
+        <span class="section-number">03</span>
+        <h2>The Genesis of Gluten</h2>
+        <p class="section-desc">History &amp; Motivation</p>
+      </section>
+
+      <section>
+        <h2>From Gazelle to Gluten</h2>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-date">2019–2020</div>
+            <div class="timeline-content">Intel develops <strong>Gazelle</strong> — native vectorized engine for Spark (OAP). Proved the concept, but hard to maintain standalone.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2021</div>
+            <div class="timeline-content">Meta open-sources <strong>Velox</strong> — reusable C++ execution library. 💡 <em>"What if we glued this to Spark?"</em></div>
+          </div>
+          <div class="timeline-item milestone">
+            <div class="timeline-date">2022 Q1</div>
+            <div class="timeline-content">Intel &amp; Kyligence co-create <strong>Gluten</strong>. Vision: Make Spark fast without rewriting a single job.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2022 Jun</div>
+            <div class="timeline-content">Unveiled at <strong>Data+AI Summit 2022</strong> to 5,000+ attendees.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2022 H2</div>
+            <div class="timeline-content">BIGO, Meituan, Alibaba Cloud, NetEase, Baidu join. Community takes off.</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-date">2023</div>
+            <div class="timeline-content">Production adoption at scale. Academic paper: <em>"Modernizing Java-based Query Engines for the Lakehouse Era"</em></div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Why "Gluten"?</h2>
+        <div style="text-align:center; margin:30px 0;">
+          <p style="font-size:4em; margin-bottom:10px;">🔗</p>
+          <p style="font-size:1.5em; font-weight:600; color:#0078D4;">"Gluten" = Latin for "Glue"</p>
+        </div>
+        <blockquote>
+          <strong>"We didn't build another engine. We built the glue that makes every engine work with Spark."</strong>
+        </blockquote>
+        <ul style="margin-top:20px;">
+          <li>Glues Spark's distributed control flow to native engines' raw compute power</li>
+          <li>No query rewrites. No migration. Just configure and accelerate.</li>
+        </ul>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 4: ARCHITECTURE -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="architecture">
+        <span class="section-number">04</span>
+        <h2>Architecture Deep Dive</h2>
+        <p class="section-desc">How Gluten Works</p>
+      </section>
+
+      <section>
+        <h2>Architecture Overview</h2>
+        <div class="arch-diagram">
+          <div class="arch-layer spark">
+            <strong>Apache Spark</strong> — Distributed Control Flow, Scheduling, APIs
+          </div>
+          <div class="arch-arrow">▼ Spark Physical Plan</div>
+          <div class="arch-layer gluten">
+            <strong>Gluten Plugin</strong> — Plan → Substrait IR → JNI Bridge<br>
+            <span style="font-size:0.85em; opacity:0.8;">No code changes required — Spark plugin API</span>
+          </div>
+          <div class="arch-arrow">▼ Native Execution</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <div class="arch-layer native">
+              <strong>Velox</strong><br><span style="font-size:0.85em;">(Meta, C++ vectorized)</span>
+            </div>
+            <div class="arch-layer native">
+              <strong>ClickHouse</strong><br><span style="font-size:0.85em;">(Kyligence backend)</span>
+            </div>
+          </div>
+          <div style="margin-top:10px; font-size:0.9em; color:#605E5C;">
+            Data Format: <strong>Apache Arrow ColumnarBatch</strong>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Key Components</h2>
+        <table>
+          <thead>
+            <tr><th>Component</th><th>Role</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Query Plan Conversion</strong></td><td>Transforms Spark physical plan → Substrait plan</td></tr>
+            <tr><td><strong>Unified Memory Mgmt</strong></td><td>Manages native off-heap memory allocation</td></tr>
+            <tr><td><strong>Columnar Shuffle</strong></td><td>Columnar exchange operator reusing Spark's shuffle service</td></tr>
+            <tr><td><strong>Fallback Mechanism</strong></td><td>ColumnarToRow / RowToColumnar for unsupported operators</td></tr>
+            <tr><td><strong>Metrics</strong></td><td>Native engine metrics displayed in Spark UI</td></tr>
+            <tr><td><strong>Shim Layer</strong></td><td>Multi-version Spark compatibility (3.2, 3.3, 3.4, 3.5)</td></tr>
+          </tbody>
+        </table>
+        <blockquote style="margin-top:15px;">
+          <strong>Design Principle:</strong> Reuse Spark's control flow; offload compute-intensive data processing to native engines.
+        </blockquote>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 5: INCUBATION JOURNEY -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="journey">
+        <span class="section-number">05</span>
+        <h2>The Incubation Journey</h2>
+        <p class="section-desc">Milestones, Numbers &amp; Lessons</p>
+      </section>
+
+      <section>
+        <h2>Growth at a Glance</h2>
+        <div class="metric-grid" style="margin-bottom:25px;">
+          <div class="metric-card">
+            <span class="metric-value">~200 → 1,500+</span>
+            <span class="metric-label">GitHub Stars (7.5× growth)</span>
+          </div>
+          <div class="metric-card green">
+            <span class="metric-value">30+ → 70+</span>
+            <span class="metric-label">Contributors (2.3× growth)</span>
+          </div>
+          <div class="metric-card purple">
+            <span class="metric-value">2 → 10+</span>
+            <span class="metric-label">Contributing Companies</span>
+          </div>
+          <div class="metric-card orange">
+            <span class="metric-value">0 → 5</span>
+            <span class="metric-label">Apache Releases</span>
+          </div>
+        </div>
+        <h3>Three Phases</h3>
+        <div class="three-col">
+          <div class="persona-card">
+            <h4>Phase 1: Prototype (2022)</h4>
+            <p>Gazelle learnings, first public talks, 2 companies, first 50 stars</p>
+          </div>
+          <div class="persona-card green">
+            <h4>Phase 2: Community (2023–24)</h4>
+            <p>Multi-company adoption, first Apache release, 200+ stars</p>
+          </div>
+          <div class="persona-card purple">
+            <h4>Phase 3: Maturity (2025–26)</h4>
+            <p>5 releases, diverse PMC, GlutenCon, graduated as TLP</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Key Milestones</h2>
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Milestone</th><th>Key Numbers</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>2022 Q1</strong></td><td>Project created by Intel &amp; Kyligence</td><td>2 founding orgs</td></tr>
+            <tr><td><strong>2022 Jun</strong></td><td>First talk at Data+AI Summit</td><td>50 GitHub stars</td></tr>
+            <tr><td><strong>Dec 2023</strong></td><td>Entered Apache Incubator</td><td>200 stars, 30+ contributors</td></tr>
+            <tr><td><strong>Sep 2024</strong></td><td>Release 1.2.0</td><td>First Apache release</td></tr>
+            <tr><td><strong>Jan 2025</strong></td><td>Release 1.3.0</td><td>OOM issues ↓ 70%</td></tr>
+            <tr><td><strong>Oct 2025</strong></td><td>Release 1.5.0</td><td>1,000+ stars</td></tr>
+            <tr><td><strong>Nov 2025</strong></td><td>First GlutenCon</td><td>80 attendees, 12 new contributors</td></tr>
+            <tr style="background:#EBF3FB;"><td><strong>Feb 18, 2026</strong></td><td>🎓 <strong>Graduated as Apache TLP</strong></td><td>1,500+ stars, 70+ contribs, 6K+ commits</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Lessons Learned — The Hard Parts</h2>
+        <p style="margin-bottom:15px;"><em>Graduating in 2 years sounds fast — but it didn't feel fast while we were in it.</em></p>
+        <div class="lesson-card">
+          <h4>Lesson 1: Governance Is Harder Than Code</h4>
+          <p>Early on, 90% of contributions came from Intel. ASF mentors were clear: <em>"Diversify your PMC, or you won't graduate."</em> We learned to make all decisions public, rotate meeting times globally, and explicitly invite dissent.</p>
+        </div>
+        <div class="lesson-card">
+          <h4>Lesson 2: Two Backends = Twice the Complexity</h4>
+          <p>Supporting both Velox and ClickHouse nearly fractured the community. <strong>Solution:</strong> Backend abstraction layer — unified Spark integration, separated backend code.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>More Lessons Learned</h2>
+        <div class="lesson-card">
+          <h4>Lesson 3: Memory Management — The 9-Month Battle</h4>
+          <p>Spark's on-heap vs. Velox's off-heap competed for RAM. We chose dynamic negotiation over fixed partitions. Took 9 months. <strong>OOM issues dropped 70%</strong> after 1.3.0.</p>
+        </div>
+        <div class="lesson-card">
+          <h4>Lesson 4: Stars ≠ Contributors</h4>
+          <p>Conference talks got us GitHub stars, but stars don't write code. <strong>GlutenCon workshops</strong> with 80 hands-on attendees yielded 12 new active contributors in 2 months.</p>
+        </div>
+        <div class="lesson-card">
+          <h4>Lesson 5: IP Compliance Is a Blocker</h4>
+          <p>A trademark concern surfaced the week before our graduation vote. 72 hours of legal research. <strong>Lesson: Do IP due diligence early.</strong></p>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 6: GRADUATION -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="graduation">
+        <span class="section-number">06</span>
+        <h2>Graduation Day</h2>
+        <p class="section-desc">What It Took to Become a TLP</p>
+      </section>
+
+      <section>
+        <h2>ASF Graduation Requirements ✅</h2>
+        <table>
+          <thead>
+            <tr><th>Requirement</th><th>How Gluten Met It</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>🌍 <strong>Diverse Community</strong></td><td>Contributors from 10+ companies (Intel, Kyligence, Microsoft, IBM, Meta, BIGO…)</td></tr>
+            <tr><td>🏛️ <strong>Independent Governance</strong></td><td>No single company controls the PMC</td></tr>
+            <tr><td>📦 <strong>Regular Releases</strong></td><td>5 releases in 2 years, full Apache release process</td></tr>
+            <tr><td>💬 <strong>Transparent Decisions</strong></td><td>All discussions on dev@gluten.apache.org</td></tr>
+            <tr><td>📜 <strong>License Compliance</strong></td><td>Apache License 2.0, clean IP</td></tr>
+            <tr><td>🛡️ <strong>OpenSSF Best Practices</strong></td><td>Achieved OpenSSF Best Practices badge</td></tr>
+          </tbody>
+        </table>
+        <blockquote style="margin-top:15px;">
+          <strong>"Graduation is not just about code quality; it's about sustainable governance and a community that can survive leadership changes."</strong>
+        </blockquote>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 7: COMPETITIVE LANDSCAPE -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="competitive">
+        <span class="section-number">07</span>
+        <h2>Why Gluten?</h2>
+        <p class="section-desc">Competitive Landscape &amp; Positioning</p>
+      </section>
+
+      <section>
+        <h2>The Landscape at a Glance</h2>
+        <table>
+          <thead>
+            <tr><th>Solution</th><th>Performance</th><th>Spark Compat.</th><th>Open Source</th><th>Deployment</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Vanilla Spark</td><td>Baseline</td><td>100%</td><td>✅ Apache 2.0</td><td>Anywhere</td></tr>
+            <tr><td><strong>Databricks Photon</strong></td><td>3–6× faster</td><td>100%</td><td>❌ Proprietary</td><td>Databricks only</td></tr>
+            <tr style="background:#EBF3FB;"><td><strong>Apache Gluten</strong></td><td><strong>2–6× faster</strong></td><td><strong>95%+</strong></td><td><strong>✅ Apache 2.0</strong></td><td><strong>Anywhere</strong></td></tr>
+            <tr><td>Rewrite in Velox/DuckDB</td><td>5–10× faster</td><td>0% (rewrite)</td><td>✅</td><td>New stack</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Gluten vs. Photon</h2>
+        <div class="comparison-grid">
+          <div class="comparison-card">
+            <h4>Databricks Photon</h4>
+            <ul>
+              <li>❌ Must use Databricks cloud</li>
+              <li>❌ Pay markup on compute</li>
+              <li>❌ Closed source</li>
+              <li>✅ Zero config, deeply integrated</li>
+            </ul>
+            <p style="margin-top:15px; font-style:italic; color:#605E5C;">Use if: all-in on Databricks</p>
+          </div>
+          <div class="comparison-card highlight">
+            <h4>Apache Gluten</h4>
+            <ul>
+              <li>✅ Run anywhere (any cloud, on-prem)</li>
+              <li>✅ Use your own infrastructure</li>
+              <li>✅ Open source — fork, extend, contribute</li>
+              <li>✅ 10+ companies, 70+ contributors</li>
+            </ul>
+            <p style="margin-top:15px; font-style:italic; color:#0078D4; font-weight:600;">Use if: you want performance without lock-in</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>The Gluten Value Proposition</h2>
+        <div class="value-prop">
+          <div class="check-item"><strong>Native performance (2–6× faster)</strong></div>
+          <div class="check-item"><strong>Zero application code changes</strong></div>
+          <div class="check-item"><strong>Apache 2.0 license (no vendor lock-in)</strong></div>
+          <div class="check-item"><strong>Run anywhere (cloud, on-prem, hybrid)</strong></div>
+          <div class="check-item"><strong>Backed by 10+ companies</strong></div>
+          <div class="check-item"><strong>Production-proven (Microsoft Fabric, IBM watsonx)</strong></div>
+        </div>
+        <blockquote>
+          <strong>Gluten is the middle path:</strong> Open-source, Spark-compatible native acceleration without rewriting your stack.
+        </blockquote>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 8: CURRENT STATUS -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="status">
+        <span class="section-number">08</span>
+        <h2>Current Status</h2>
+        <p class="section-desc">By the Numbers</p>
+      </section>
+
+      <section>
+        <h2>GitHub Snapshot — March 2026</h2>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-value">1,500+</span>
+            <span class="metric-label">⭐ GitHub Stars</span>
+          </div>
+          <div class="metric-card green">
+            <span class="metric-value">6,000+</span>
+            <span class="metric-label">🔀 Total Commits</span>
+          </div>
+          <div class="metric-card purple">
+            <span class="metric-value">70+</span>
+            <span class="metric-label">👥 Contributors</span>
+          </div>
+          <div class="metric-card orange">
+            <span class="metric-value">10+</span>
+            <span class="metric-label">🏢 Companies</span>
+          </div>
+        </div>
+        <div class="metric-grid" style="margin-top:15px;">
+          <div class="metric-card">
+            <span class="metric-value">5</span>
+            <span class="metric-label">📦 Apache Releases</span>
+          </div>
+          <div class="metric-card green">
+            <span class="metric-value">4</span>
+            <span class="metric-label">🔧 Spark Versions (3.2–3.5)</span>
+          </div>
+          <div class="metric-card purple">
+            <span class="metric-value">2</span>
+            <span class="metric-label">⚙️ Native Backends</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Performance Benchmarks</h2>
+        <h3>TPC-DS 1TB — Gluten+Velox vs. Vanilla Spark</h3>
+        <div class="metric-grid" style="margin-bottom:20px;">
+          <div class="metric-card">
+            <span class="metric-value">1.72×</span>
+            <span class="metric-label">Average Speedup</span>
+          </div>
+          <div class="metric-card green">
+            <span class="metric-value">5.48×</span>
+            <span class="metric-label">Peak Speedup</span>
+          </div>
+          <div class="metric-card purple">
+            <span class="metric-value">87%</span>
+            <span class="metric-label">Queries Improved (90/104)</span>
+          </div>
+          <div class="metric-card orange">
+            <span class="metric-value">~42%</span>
+            <span class="metric-label">Compute Cost Savings</span>
+          </div>
+        </div>
+        <h3>TPC-H — Velox Backend</h3>
+        <div class="two-col">
+          <div class="metric-card">
+            <span class="metric-value">2.71×</span>
+            <span class="metric-label">Overall Speedup</span>
+          </div>
+          <div class="metric-card green">
+            <span class="metric-value">14.53×</span>
+            <span class="metric-label">Peak Speedup (single query)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 9: ADOPTION -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="adoption">
+        <span class="section-number">09</span>
+        <h2>Industry Adoption</h2>
+        <p class="section-desc">Real-World Impact</p>
+      </section>
+
+      <section>
+        <h2>Major Adopters</h2>
+        <table>
+          <thead>
+            <tr><th>Company</th><th>Usage</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Microsoft</strong></td><td>Fabric Native Execution Engine — GA since May 2025</td></tr>
+            <tr><td><strong>IBM</strong></td><td>watsonx.data Spark acceleration engine</td></tr>
+            <tr><td><strong>Intel</strong></td><td>Core contributor, Xeon performance optimization</td></tr>
+            <tr><td><strong>Kyligence</strong></td><td>Co-founder, enterprise analytics platform</td></tr>
+            <tr><td><strong>BIGO</strong></td><td>Production analytics (100M+ DAU)</td></tr>
+            <tr><td><strong>Meituan</strong></td><td>Large-scale data processing</td></tr>
+            <tr><td><strong>Alibaba Cloud</strong></td><td>Cloud-native Spark acceleration</td></tr>
+            <tr><td><strong>Google</strong></td><td>Contributing to project development</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>🌟 Microsoft Fabric — Native Execution Engine</h2>
+        <div class="two-col">
+          <div>
+            <h3>Timeline</h3>
+            <ul>
+              <li>Public Preview: <strong>June 2024</strong> (Runtime 1.2)</li>
+              <li>General Availability: <strong>May 2025</strong> (Runtime 1.3)</li>
+            </ul>
+            <h3 style="margin-top:20px;">Key Results</h3>
+            <div class="metric-grid">
+              <div class="metric-card">
+                <span class="metric-value">~4×</span>
+                <span class="metric-label">TPC-DS Speedup</span>
+              </div>
+              <div class="metric-card green">
+                <span class="metric-value">6×</span>
+                <span class="metric-label">Internal Workloads</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3>Why It Matters</h3>
+            <ul>
+              <li>Zero code changes — enable via Spark config</li>
+              <li>Available to <strong>all Fabric Spark users</strong> globally</li>
+              <li>Uses open-source Gluten+Velox</li>
+              <li>No vendor lock-in (unlike Photon)</li>
+            </ul>
+            <blockquote style="margin-top:20px; font-size:0.9em;">
+              "Fabric's NEE proves that open-source native acceleration can compete with proprietary engines at cloud scale."
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>🌟 More Success Stories</h2>
+        <div class="two-col">
+          <div class="persona-card green">
+            <h4>IBM watsonx.data</h4>
+            <ul>
+              <li><strong>2.5× avg speedup</strong> on ML feature engineering</li>
+              <li><strong>4–5× speedup</strong> on complex joins</li>
+              <li>60% customer adoption within 6 months</li>
+            </ul>
+          </div>
+          <div class="persona-card orange">
+            <h4>BIGO — 100M+ DAU</h4>
+            <ul>
+              <li><strong>90% queries: 2–3× faster</strong></li>
+              <li><strong>Aggregation: up to 8× speedup</strong></li>
+              <li>Enabled with 3 lines of Spark config</li>
+            </ul>
+          </div>
+        </div>
+        <h3 style="margin-top:20px;">Conference Presence</h3>
+        <table>
+          <thead>
+            <tr><th>Event</th><th>Year</th><th>Highlight</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Data+AI Summit</td><td>2022</td><td>Gluten Intro (Intel)</td></tr>
+            <tr><td>Netflix Open Forum</td><td>2025</td><td>"Revolutionizing Data Processing Efficiency"</td></tr>
+            <tr><td><strong>GlutenCon</strong></td><td>2025</td><td>First dedicated community conference</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 10: BECOMING A COMMITTER -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="committer">
+        <span class="section-number">10</span>
+        <h2>Becoming a Committer</h2>
+        <p class="section-desc">The Apache Way</p>
+      </section>
+
+      <section>
+        <h2>The Apache Way</h2>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <span class="metric-value">🌐</span>
+            <span class="metric-label"><strong>Openness</strong><br>All decisions transparent</span>
+          </div>
+          <div class="metric-card green">
+            <span class="metric-value">🏅</span>
+            <span class="metric-label"><strong>Meritocracy</strong><br>Earned trust, earned role</span>
+          </div>
+          <div class="metric-card purple">
+            <span class="metric-value">🤝</span>
+            <span class="metric-label"><strong>Consensus</strong><br>Collaborative direction</span>
+          </div>
+          <div class="metric-card orange">
+            <span class="metric-value">❤️</span>
+            <span class="metric-label"><strong>Community &gt; Code</strong><br>People sustain projects</span>
+          </div>
+        </div>
+        <blockquote style="margin-top:20px;">
+          Here's the beautiful truth about Apache projects: you earn your seat at the table. No corporate ladder. No politics. Just consistent, quality contributions.
+        </blockquote>
+      </section>
+
+      <section>
+        <h2>The Path to Committership</h2>
+        <h3>What Counts as a "Contribution"?</h3>
+        <table>
+          <thead>
+            <tr><th>Type</th><th>Examples</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>💻 <strong>Code</strong></td><td>Features, bug fixes, performance improvements</td></tr>
+            <tr><td>🔍 <strong>Code Reviews</strong></td><td>Thoughtful PR reviews, design feedback</td></tr>
+            <tr><td>📝 <strong>Documentation</strong></td><td>User guides, architecture docs, blog posts</td></tr>
+            <tr><td>🤝 <strong>Community</strong></td><td>Answering questions, mentoring newcomers</td></tr>
+            <tr><td>🧪 <strong>Testing</strong></td><td>Bug reports, test improvements, CI/CD</td></tr>
+            <tr><td>📢 <strong>Advocacy</strong></td><td>Conference talks, articles, workshops</td></tr>
+          </tbody>
+        </table>
+        <h3 style="margin-top:15px;">A Contributor's Timeline</h3>
+        <ul>
+          <li><strong>Month 1–2:</strong> Fix 3–5 good-first-issues. Join dev@. Review 1 PR/week.</li>
+          <li><strong>Month 3–4:</strong> Own a small area. Drive 1 design discussion.</li>
+          <li><strong>Month 5–6:</strong> Be the "go-to" person for a topic. Mentor a newcomer.</li>
+        </ul>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 11: COMMITTER COMPARISON -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="committer-compare">
+        <span class="section-number">11</span>
+        <h2>Committer Criteria</h2>
+        <p class="section-desc">Gluten vs. Spark vs. Velox</p>
+      </section>
+
+      <section>
+        <h2>Committer Criteria Comparison</h2>
+        <table style="font-size:0.8em;">
+          <thead>
+            <tr><th>Dimension</th><th>Apache Gluten</th><th>Apache Spark</th><th>Velox (Meta)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Governance</strong></td><td>Apache PMC</td><td>Apache PMC</td><td>Meta-led technical governance</td></tr>
+            <tr><td><strong>Nomination</strong></td><td>PMC vote (3+ "+1")</td><td>PMC vote (3+ "+1")</td><td>Merit-based, component maintainers</td></tr>
+            <tr><td><strong>Time to Committer</strong></td><td>3–6 months active</td><td>Long-term sustained</td><td>Ongoing, component-focused</td></tr>
+            <tr><td><strong>Company Independence</strong></td><td>Required</td><td>Required</td><td>Merit-based but Meta controls merge</td></tr>
+            <tr><td><strong>Key Differentiator</strong></td><td>🟢 Growing — great opportunity</td><td>🟡 Mature — deep expertise</td><td>🔴 Open gov, closed merge</td></tr>
+            <tr><td><strong>Special Focus</strong></td><td>Native integration, Substrait, JNI</td><td>Catalyst, AQE, DataFrame</td><td>Vectorized exec, memory mgmt</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>🔑 Key Insight for Contributors</h2>
+        <blockquote>
+          <strong>Apache Gluten is at a unique inflection point.</strong> As a newly graduated TLP, it is still actively growing its committer base.
+        </blockquote>
+        <ul style="margin-top:20px; font-size:1.05em;">
+          <li>✅ <strong>Lower barrier</strong> to entry compared to mature projects like Spark</li>
+          <li>✅ More opportunities to make <strong>impactful contributions</strong></li>
+          <li>✅ Contributions <strong>strengthen your profile</strong> in Spark and Velox ecosystems</li>
+          <li>✅ Cross-project contributions are <strong>highly valued</strong></li>
+        </ul>
+        <div class="arch-diagram" style="margin-top:20px;">
+          <div class="arch-layer spark"><strong>Apache Spark</strong> (Upstream)</div>
+          <div class="arch-arrow">⬍</div>
+          <div class="arch-layer gluten"><strong>Apache Gluten</strong> ← You are here! 🎯</div>
+          <div class="arch-arrow">⬍</div>
+          <div class="arch-layer native"><strong>Velox</strong> (Downstream)</div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 12: ROADMAP -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="roadmap">
+        <span class="section-number">12</span>
+        <h2>Roadmap</h2>
+        <p class="section-desc">Three Big Bets for 2026</p>
+      </section>
+
+      <section>
+        <h2>Big Bet 1: 🚀 Run Anywhere Spark Runs</h2>
+        <p><em>Platform &amp; Version Coverage</em></p>
+        <table>
+          <thead>
+            <tr><th>Initiative</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Spark 4.0 Full Support</strong></td><td>First-class support for the next major Spark release</td></tr>
+            <tr><td><strong>PySpark &amp; Arrow UDF</strong></td><td>Native Python UDFs — broadening the audience</td></tr>
+            <tr><td><strong>Full Datalake Support</strong></td><td>Extended JSON, Iceberg, Hudi, Delta support</td></tr>
+            <tr><td><strong>GPU / FPGA / ARM</strong></td><td>Heterogeneous hardware accelerator support</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Big Bet 2: ⚡ Make Native the Default</h2>
+        <p><em>Performance &amp; Hardware</em></p>
+        <blockquote>Right now, one Spark task = one CPU core. Imagine using all 32 cores per task. That's the future we're building.</blockquote>
+        <table>
+          <thead>
+            <tr><th>Initiative</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Multi-Core per Task</strong></td><td>Native parallelism within Spark executors</td></tr>
+            <tr><td><strong>Spill Optimization</strong></td><td>Better off-heap spill strategies</td></tr>
+            <tr><td><strong>Hash Table Broadcast</strong></td><td>Optimized broadcast join via native hash tables</td></tr>
+            <tr><td><strong>Dictionary Shuffle</strong></td><td>Compressed shuffle for dictionary-encoded columns</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Big Bet 3: 📊 Delight Developers</h2>
+        <p><em>Observability &amp; UX — Great performance means nothing if you can't debug it.</em></p>
+        <table>
+          <thead>
+            <tr><th>Initiative</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Query Trace</strong></td><td>Enhanced diagnostics and execution tracing</td></tr>
+            <tr><td><strong>ANSI SQL Coverage</strong></td><td>Broader ANSI SQL feature compliance</td></tr>
+            <tr><td><strong>Complex Types</strong></td><td>Better nested/complex data type support</td></tr>
+            <tr><td><strong>Scan Pushdown</strong></td><td>Filter/projection pushdown into remote storage</td></tr>
+          </tbody>
+        </table>
+        <h3 style="margin-top:15px;">Horizon: Beyond Spark</h3>
+        <ul>
+          <li><strong>Gluten + Flink + Velox</strong> — Proof-of-concept for Flink integration</li>
+          <li><strong>DataFusion Backend</strong> — Rust-based execution as a third backend option</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Release Plan — 2026</h2>
+        <table>
+          <thead>
+            <tr><th>Quarter</th><th>Version</th><th>Highlights</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Q1</strong></td><td>1.6.0</td><td>Post-graduation cleanup, Spark 4.0 beta</td></tr>
+            <tr><td><strong>Q2</strong></td><td>1.7.0</td><td>Multi-core execution, PySpark UDF support</td></tr>
+            <tr><td><strong>Q3</strong></td><td>1.8.0</td><td>Flink PoC, GPU backend exploration</td></tr>
+            <tr><td><strong>Q4</strong></td><td>2.0.0</td><td>Major release — Spark 4.0 GA, new backends</td></tr>
+          </tbody>
+        </table>
+        <blockquote style="margin-top:15px;">
+          <strong>If you want to be a committer in 2026, pick one of these bets and become the person everyone pings about it.</strong>
+        </blockquote>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 13: HOW TO CONTRIBUTE -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-section="contribute">
+        <span class="section-number">13</span>
+        <h2>How You Can Contribute</h2>
+        <p class="section-desc">Paths for Every Persona</p>
+      </section>
+
+      <section>
+        <h2>Contribution Paths by Persona</h2>
+        <div class="two-col">
+          <div class="persona-card">
+            <h4>🔧 C++ Backend Developer</h4>
+            <p><strong>You know:</strong> C++17, vectorized execution, Arrow</p>
+            <p><strong>Start:</strong> Implement a missing SQL function in Velox backend</p>
+            <p><strong>Impact:</strong> 🔴 High</p>
+          </div>
+          <div class="persona-card green">
+            <h4>☕ Spark Java/Scala Developer</h4>
+            <p><strong>You know:</strong> Catalyst, physical plans, DataFrame</p>
+            <p><strong>Start:</strong> Fix Spark 3.5/4.0 compatibility issues</p>
+            <p><strong>Impact:</strong> 🟡 High</p>
+          </div>
+          <div class="persona-card purple">
+            <h4>📊 Data Engineer / Analyst</h4>
+            <p><strong>You know:</strong> SQL, data pipelines, real workloads</p>
+            <p><strong>Start:</strong> Run benchmarks, report bugs, share results</p>
+            <p><strong>Impact:</strong> 🟢 Very High</p>
+          </div>
+          <div class="persona-card orange">
+            <h4>📝 Technical Writer</h4>
+            <p><strong>You know:</strong> Explaining complex systems simply</p>
+            <p><strong>Start:</strong> Improve quickstart guide, write tutorials</p>
+            <p><strong>Impact:</strong> 🟢 Very High</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Getting Started &amp; Community</h2>
+        <div class="two-col">
+          <div>
+            <h3>5 Steps to Your First Contribution</h3>
+            <ol>
+              <li>⭐ Star &amp; Fork → <a href="https://github.com/apache/gluten" style="color:#0078D4;">github.com/apache/gluten</a></li>
+              <li>📧 Join Mailing List → <code>dev-subscribe@gluten.apache.org</code></li>
+              <li>💬 Join Slack → <code>#incubator-gluten</code> on ASF Slack</li>
+              <li>🎯 Pick a task from your persona</li>
+              <li>🚀 Submit your first PR!</li>
+            </ol>
+          </div>
+          <div>
+            <h3>Why Contribute to Gluten?</h3>
+            <ul>
+              <li><strong>Impact:</strong> Your code powers analytics for millions</li>
+              <li><strong>Learning:</strong> Work with Microsoft, IBM, Meta, Intel engineers</li>
+              <li><strong>Career:</strong> "Apache committer" opens doors</li>
+              <li><strong>Community:</strong> Welcoming, multi-company, global team</li>
+              <li><strong>Timing:</strong> Shape the project's next phase — right now</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SECTION 14: Q&A / ENDING -->
+      <!-- ============================================================ -->
+      <section class="ending-slide" data-section="qa">
+        <h2>🎉 Thank You!</h2>
+        <p style="font-size:1.3em; margin:25px 0; font-weight:300;">Apache Gluten is now a Top-Level Project.<br>Join us in building the future of native Spark execution!</p>
+        <div style="margin:30px 0; font-size:1.1em;">
+          <p>🔗 <a href="https://gluten.apache.org/">gluten.apache.org</a></p>
+          <p>📧 <a href="mailto:dev@gluten.apache.org">dev@gluten.apache.org</a></p>
+          <p>⭐ <a href="https://github.com/apache/gluten">github.com/apache/gluten</a></p>
+        </div>
+        <p style="font-size:1.5em; margin-top:30px; font-weight:600;">The invitation is open.<br>What will you build with us?</p>
+      </section>
+
+    </div><!-- /.slides -->
+  </div><!-- /.reveal -->
+
+  <!-- Reveal.js from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+
+  <!-- Presentation Framework -->
+  <script src="../../js/presentation.js"></script>
+
+  <!-- Initialize -->
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      width: 1280,
+      height: 720,
+      margin: 0.04,
+      minScale: 0.2,
+      maxScale: 2.0,
+      transition: 'slide',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      center: false,
+      controls: true,
+      controlsTutorial: true,
+      progress: true,
+      history: true,
+      keyboard: true,
+      overview: true,
+      touch: true,
+      hideInactiveCursor: true,
+      hideCursorTime: 3000,
+    });
+  </script>
+</body>
+</html>
