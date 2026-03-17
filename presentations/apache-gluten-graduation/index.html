@@ -881,7 +881,7 @@
           <tbody>
             <tr><td><strong>Spark 4.0 Full Support</strong></td><td>First-class support for the next major Spark release</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
             <tr><td><strong>PySpark &amp; Arrow UDF</strong></td><td>Native Python UDFs — broadening the audience</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
-            <tr><td><strong>Full Datalake Support</strong></td><td>Extended JSON, Iceberg, Hudi, Delta support</td><td></td></tr>
+            <tr><td><strong>Full Datalake Support</strong></td><td>Extended JSON, Iceberg, Hudi, Delta support</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
             <tr><td><strong>GPU / ARM Support</strong></td><td>Heterogeneous hardware accelerator support</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
           </tbody>
         </table>
@@ -890,15 +890,15 @@
       <section>
         <h2>Big Bet 2: ⚡ Make Native the Default</h2>
         <p><em>Performance &amp; Hardware</em></p>
-        <blockquote>Right now, one Spark task = one CPU core. Imagine using all 32 cores per task. That's the future we're building.</blockquote>
+        <blockquote>Native execution unlocks C++-level optimizations — SIMD, cache-aware memory layout, and zero-copy data paths — making every CPU cycle count.</blockquote>
         <table>
           <thead>
             <tr><th>Initiative</th><th>Description</th><th>Contribute?</th></tr>
           </thead>
           <tbody>
             <tr><td><strong>Multi-Core per Task</strong></td><td>Native parallelism within Spark executors</td><td></td></tr>
-            <tr><td><strong>Spill Optimization</strong></td><td>Better off-heap spill strategies</td><td></td></tr>
-            <tr><td><strong>Hash Table Broadcast</strong></td><td>Optimized broadcast join via native hash tables</td><td></td></tr>
+            <tr><td><strong>Spill Optimization</strong></td><td>Better off-heap spill strategies</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
+            <tr><td><strong>Join Optimization</strong></td><td>Optimized join strategies — broadcast, hash, sort-merge with native acceleration</td><td></td></tr>
             <tr><td><strong>Dictionary Shuffle</strong></td><td>Compressed shuffle for dictionary-encoded columns</td><td></td></tr>
           </tbody>
         </table>
@@ -914,14 +914,14 @@
           <tbody>
             <tr><td><strong>Query Trace</strong></td><td>Enhanced diagnostics and execution tracing</td><td></td></tr>
             <tr><td><strong>ANSI SQL Coverage</strong></td><td>Broader ANSI SQL feature compliance</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
-            <tr><td><strong>Complex Types</strong></td><td>Better nested/complex data type support</td><td></td></tr>
+            <tr><td><strong>Complex Types</strong></td><td>Better nested/complex data type support</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
             <tr><td><strong>Scan Pushdown</strong></td><td>Filter/projection pushdown into remote storage</td><td></td></tr>
           </tbody>
         </table>
         <h3 style="margin-top:15px;">Horizon: Beyond Spark</h3>
         <ul>
           <li><strong>Gluten + Flink + Velox</strong> — Proof-of-concept for Flink integration</li>
-          <li><strong>DataFusion Backend</strong> — Rust-based execution as a third backend option</li>
+          <li><strong>Bolt / Omni / DataFusion Backend</strong> — Alternative native backends (Huawei Bolt, Huawei Omni, Rust-based DataFusion) expanding engine diversity</li>
           <li><strong>Spark Streaming Support</strong> — Native acceleration for structured streaming workloads <span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></li>
         </ul>
       </section>
