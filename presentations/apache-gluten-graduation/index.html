@@ -646,17 +646,62 @@
             </ul>
           </div>
         </div>
-        <h3 style="margin-top:20px;">Conference Presence</h3>
-        <table>
+        <div class="two-col" style="margin-top:15px;">
+          <div class="persona-card purple">
+            <h4>Google Dataproc — Next-Gen Query Engine</h4>
+            <ul>
+              <li>Integrated Gluten+Velox into Dataproc NQE</li>
+              <li><strong>Significant reductions</strong> in query latency &amp; resource consumption</li>
+              <li>Qualification tool to predict customer speedups</li>
+            </ul>
+          </div>
+          <div class="persona-card">
+            <h4>Acceldata — ODP Spark Platform</h4>
+            <ul>
+              <li><strong>1–3× faster</strong> query execution (TPC-DS 100 GB)</li>
+              <li><strong>20–30% fewer CPU cycles</strong> per row</li>
+              <li>$150K–$300K annual compute savings on 1000-core clusters</li>
+            </ul>
+          </div>
+        </div>
+        <div class="two-col" style="margin-top:15px;">
+          <div class="persona-card green">
+            <h4>SF Express — Logistics Data Lake</h4>
+            <ul>
+              <li>Production-scale logistics analytics with Gluten/Velox</li>
+              <li>Identified Spark bottlenecks, achieved <strong>major cost savings</strong></li>
+              <li>Presented at CommunityOverCode Asia</li>
+            </ul>
+          </div>
+          <div class="persona-card orange">
+            <h4>Meituan — Large-Scale Analytics</h4>
+            <ul>
+              <li>Deployed across large-scale data processing pipelines</li>
+              <li><strong>Significant perf gains</strong> on aggregation-heavy workloads</li>
+              <li>Contributing optimizations back to the community</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>🌟 Conference Presence &amp; Public Talks</h2>
+        <table style="font-size:0.85em;">
           <thead>
             <tr><th>Event</th><th>Year</th><th>Highlight</th></tr>
           </thead>
           <tbody>
-            <tr><td>Data+AI Summit</td><td>2022</td><td>Gluten Intro (Intel)</td></tr>
+            <tr><td>Data+AI Summit</td><td>2022–2025</td><td>Gluten Intro (Intel), Velox+Gluten deep dives</td></tr>
+            <tr><td>VeloxCon</td><td>2023–2025</td><td>Google Dataproc NQE, IBM watsonx, SF Express case studies</td></tr>
+            <tr><td>CommunityOverCode (ApacheCon)</td><td>2023–2025</td><td>SF Express journey, Alibaba Cloud adoption</td></tr>
             <tr><td>Netflix Open Forum</td><td>2025</td><td>"Revolutionizing Data Processing Efficiency"</td></tr>
             <tr><td><strong>GlutenCon</strong></td><td>2025</td><td>First dedicated community conference</td></tr>
+            <tr><td>Microsoft Fabric Conference</td><td>2024–2025</td><td>Native Execution Engine powered by Gluten+Velox</td></tr>
           </tbody>
         </table>
+        <blockquote style="margin-top:15px;">
+          <strong>Gluten has been featured in 30+ public presentations across major data conferences since 2022 — a strong signal of real-world traction.</strong>
+        </blockquote>
       </section>
 
       <!-- ============================================================ -->
@@ -738,10 +783,11 @@
           </thead>
           <tbody>
             <tr><td><strong>Governance</strong></td><td>Apache PMC</td><td>Apache PMC</td><td>Meta-led technical governance</td></tr>
-            <tr><td><strong>Nomination</strong></td><td>PMC vote (3+ "+1")</td><td>PMC vote (3+ "+1")</td><td>Merit-based, component maintainers</td></tr>
-            <tr><td><strong>Time to Committer</strong></td><td>3–6 months active</td><td>Long-term sustained</td><td>Ongoing, component-focused</td></tr>
-            <tr><td><strong>Company Independence</strong></td><td>Required</td><td>Required</td><td>Merit-based but Meta controls merge</td></tr>
-            <tr><td><strong>Key Differentiator</strong></td><td>🟢 Growing — great opportunity</td><td>🟡 Mature — deep expertise</td><td>🔴 Open gov, closed merge</td></tr>
+            <tr><td><strong>Nomination</strong></td><td>PMC vote (3+ "+1")</td><td>PMC vote (3+ "+1")</td><td>Peer-nominated by existing maintainers; approved by Project Leadership Council (PLC)</td></tr>
+            <tr><td><strong>Time to Committer</strong></td><td>3–6 months active</td><td>Long-term sustained</td><td>Ongoing, component-focused; sustained quality contributions earn trust</td></tr>
+            <tr><td><strong>Merge Rights</strong></td><td>All committers (write access)</td><td>All committers</td><td><strong>Component maintainers only</strong> — ready-to-merge right is scoped per component (e.g., Vectors, Operators, IO)</td></tr>
+            <tr><td><strong>Company Independence</strong></td><td>Required</td><td>Required</td><td>Merit-based but Meta-led PLC controls final decisions</td></tr>
+            <tr><td><strong>Key Differentiator</strong></td><td>🟢 Growing — great opportunity</td><td>🟡 Mature — deep expertise</td><td>🔴 Open contribution, scoped merge authority</td></tr>
             <tr><td><strong>Special Focus</strong></td><td>Native integration, Substrait, JNI</td><td>Catalyst, AQE, DataFrame</td><td>Vectorized exec, memory mgmt</td></tr>
           </tbody>
         </table>
@@ -765,6 +811,17 @@
           <div class="arch-arrow">⬍</div>
           <div class="arch-layer native"><strong>Velox</strong> (Downstream)</div>
         </div>
+        <h3 style="margin-top:20px;">🧭 Need Help Getting Started? Ask Our Team</h3>
+        <table style="font-size:0.85em; margin-top:10px;">
+          <thead>
+            <tr><th>Community</th><th>Team Contacts</th><th>How They Can Help</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Apache Gluten</strong></td><td>William, Kent, Zhen, Chang, Neng</td><td>Architecture, Substrait, JNI, plugin integration, PR reviews</td></tr>
+            <tr><td><strong>Apache Spark</strong></td><td>Kent</td><td>Catalyst optimizer, AQE, Spark compatibility &amp; version upgrades</td></tr>
+            <tr><td><strong>Velox</strong></td><td>Zhen</td><td>Vectorized execution, C++ backend, component maintainer guidance</td></tr>
+          </tbody>
+        </table>
       </section>
 
       <section>
@@ -823,7 +880,7 @@
           </thead>
           <tbody>
             <tr><td><strong>Spark 4.0 Full Support</strong></td><td>First-class support for the next major Spark release</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
-            <tr><td><strong>PySpark &amp; Arrow UDF</strong></td><td>Native Python UDFs — broadening the audience</td><td></td></tr>
+            <tr><td><strong>PySpark &amp; Arrow UDF</strong></td><td>Native Python UDFs — broadening the audience</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
             <tr><td><strong>Full Datalake Support</strong></td><td>Extended JSON, Iceberg, Hudi, Delta support</td><td></td></tr>
             <tr><td><strong>GPU / ARM Support</strong></td><td>Heterogeneous hardware accelerator support</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></td></tr>
           </tbody>
@@ -865,7 +922,7 @@
         <ul>
           <li><strong>Gluten + Flink + Velox</strong> — Proof-of-concept for Flink integration</li>
           <li><strong>DataFusion Backend</strong> — Rust-based execution as a third backend option</li>
-          <li><strong>Spark Streaming Support</strong> — Native acceleration for structured streaming workloads</li>
+          <li><strong>Spark Streaming Support</strong> — Native acceleration for structured streaming workloads <span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">🏢 Fabric-aligned</span></li>
         </ul>
       </section>
 
@@ -882,11 +939,15 @@
             <tr><td><strong>📐 ANSI SQL Coverage</strong></td><td>🟡 Medium</td><td>✅ Yes</td><td>Implement missing ANSI functions — well-scoped, clear acceptance criteria</td></tr>
             <tr><td><strong>⬆️ Spark Version Upgrade</strong></td><td>🟡 Medium</td><td>✅ Yes</td><td>Spark 4.0 support — API migration, compatibility testing</td></tr>
             <tr><td><strong>📡 Spark Streaming</strong></td><td>🟡 Medium</td><td>✅ Yes</td><td>Extend native acceleration to streaming — high visibility initiative</td></tr>
+            <tr><td><strong>🔧 CI/CD Maintenance</strong></td><td>🟢 Easy</td><td>✅ Yes</td><td>Improve build pipelines, test infra, CI reliability — easy entry point with broad impact</td></tr>
             <tr><td><strong>💪 GPU / ARM Support</strong></td><td>🔴 Advanced</td><td>✅ Yes</td><td>Heterogeneous compute — deep systems work with outsized impact</td></tr>
           </tbody>
         </table>
         <blockquote style="margin-top:12px;">
           <strong>Tip:</strong> Bug fixes and UT coverage are the fastest path to your first merged PR. Pick one, ship it, and build momentum toward committership.
+        </blockquote>
+        <blockquote style="margin-top:10px; border-left-color:#107C10;">
+          <strong>💡 Fabric Engineers:</strong> Bug fixes discovered in Fabric can often be submitted upstream to Gluten/Velox with minimal extra effort. This not only increases your community contribution count, but also <strong>reduces long-term maintenance cost</strong> when Fabric upgrades to newer upstream versions.
         </blockquote>
       </section>
 
@@ -903,8 +964,17 @@
             <tr><td><strong>Q4</strong></td><td>2.0.0</td><td>Major release — Spark 4.0 GA, new backends</td></tr>
           </tbody>
         </table>
-        <blockquote style="margin-top:15px;">
-          <strong>If you want to be a committer in 2026, pick one of these bets and become the person everyone pings about it.</strong>
+        <h3 style="margin-top:20px;">📋 Release Manager — A High-Impact Role</h3>
+        <p style="font-size:0.95em;">Each release needs a <strong>Release Manager</strong> — a committer or PMC member who shepherds the release from planning to distribution:</p>
+        <ul style="font-size:0.9em;">
+          <li><strong>Coordinate</strong> — Propose timelines, communicate with dev@, drive community consensus</li>
+          <li><strong>Build &amp; Validate</strong> — Prepare source artifacts, verify licensing, sign with GPG/PGP</li>
+          <li><strong>Run the Vote</strong> — Initiate PMC vote (requires 3+ binding "+1"), collect feedback</li>
+          <li><strong>Publish &amp; Announce</strong> — Upload to dist.apache.org, update website, send release announcement</li>
+          <li><strong>Ensure Compliance</strong> — Verify LICENSE/NOTICE files, dependency licenses, ASF policy adherence</li>
+        </ul>
+        <blockquote style="margin-top:12px;">
+          <strong>Serving as Release Manager is a highly visible contribution and a strong signal of project leadership — great for committer or PMC nomination.</strong>
         </blockquote>
       </section>
 
