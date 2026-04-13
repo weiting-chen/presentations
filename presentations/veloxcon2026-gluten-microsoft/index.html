@@ -13,13 +13,24 @@
   <link rel="stylesheet" href="../../css/microsoft-theme.css">
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+
+  <style>
+    .ref { font-size: 0.7em; color: var(--ms-gray-60); display: block; margin-top: 4px; }
+    .ref a { color: var(--ms-gray-60); text-decoration: underline; }
+    .internal-badge { background: #FFF3CD; color: #856404; padding: 1px 6px; border-radius: 4px; font-size: 0.75em; font-weight: 600; }
+    .thesis-box { background: linear-gradient(135deg, #EBF3FB, #F0F6FF); border-left: 5px solid var(--ms-blue); border-radius: 0 12px 12px 0; padding: 18px 24px; margin: 15px 0; font-size: 1.1em; }
+    .thesis-box strong { color: var(--ms-blue); }
+    .flow-step { background: var(--ms-white); border: 2px solid var(--ms-gray-30); border-radius: 10px; padding: 12px 16px; text-align: center; font-size: 0.88em; }
+    .flow-step.active { border-color: var(--ms-blue); background: #EBF3FB; }
+    .flow-arrow { font-size: 1.5em; color: var(--ms-blue); display: flex; align-items: center; }
+  </style>
 </head>
 <body>
   <div class="reveal">
     <div class="slides">
 
       <!-- ============================================================ -->
-      <!-- TITLE SLIDE -->
+      <!-- SLIDE 1: TITLE -->
       <!-- ============================================================ -->
       <section class="title-slide" data-background-gradient="linear-gradient(135deg, #0078D4, #003D6B)" data-section="title">
         <div class="slide-inner-center">
@@ -28,785 +39,529 @@
         <div class="meta">
           <p>William Chen &amp; Ajith Shetty · Microsoft · VeloxCon 2026</p>
           <p style="margin-top:4px; opacity:0.7;">April 30, 2026 · Meta HQ, Menlo Park</p>
-          <p style="margin-top:8px; opacity:0.6;">Press <kbd style="background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:4px;">→</kbd> to navigate · <kbd style="background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:4px;">T</kbd> for overview · <kbd style="background:rgba(255,255,255,0.2); padding:2px 8px; border-radius:4px;">F</kbd> for fullscreen</p>
         </div>
         </div>
       </section>
 
       <!-- ============================================================ -->
-      <!-- AGENDA -->
+      <!-- SLIDE 2: AGENDA -->
       <!-- ============================================================ -->
       <section data-section="agenda">
         <h2>Agenda</h2>
-        <div class="two-col">
-          <div>
-            <ol>
-              <li><strong>Why This Talk</strong> — Context &amp; Motivation</li>
-              <li><strong>Gluten + Velox Architecture</strong> — How It Works</li>
-              <li><strong>Microsoft's Journey</strong> — Why Native Execution</li>
-              <li><strong>Production Experience</strong> — Challenges at Scale</li>
-              <li><strong>Upstream Contributions</strong> — Gluten &amp; Velox</li>
-            </ol>
-          </div>
-          <div>
-            <ol start="6">
-              <li><strong>Fabric NEE</strong> — Differentiation at Microsoft</li>
-              <li><strong>Graduation &amp; Lessons</strong> — Becoming a TLP</li>
-              <li><strong>2026 Roadmap</strong> — What's Next</li>
-              <li><strong>Q &amp; A</strong></li>
-            </ol>
-          </div>
-        </div>
-        <blockquote style="margin-top:20px;">
-          <strong>Note:</strong> Yuan Zhou's earlier talk covers Gluten's community &amp; ecosystem story in depth. This talk focuses on <strong>Microsoft's contributions</strong> and <strong>production experience</strong> with Gluten + Velox — including our <strong>Native Execution Engine</strong> in Microsoft Fabric.
+        <ol>
+          <li><strong>Why This Moment Matters</strong> — Gluten TLP &amp; Microsoft's bet</li>
+          <li><strong>Architecture in Practice</strong> — How Gluten offloads Spark to Velox</li>
+          <li><strong>Production War Stories</strong> — What broke, what we learned</li>
+          <li><strong>Upstream Contributions</strong> — Semantic parity · Fallback reduction · Performance</li>
+          <li><strong>Fabric NEE</strong> — Production feedback at Microsoft scale</li>
+          <li><strong>Graduation &amp; Roadmap</strong> — TLP lessons &amp; 2026 outlook</li>
+          <li><strong>Q &amp; A</strong></li>
+        </ol>
+        <blockquote style="margin-top:12px;">
+          <strong>Context:</strong> Yuan Zhou's talk (1:40 PM) covers Gluten's community &amp; ecosystem in depth. This talk focuses on <strong>what production at scale teaches you</strong> — and how those lessons shaped Gluten, Velox, and Fabric.
         </blockquote>
       </section>
 
       <!-- ============================================================ -->
-      <!-- SECTION 1: WHY THIS TALK -->
+      <!-- SLIDE 3: WHY THIS MOMENT MATTERS -->
       <!-- ============================================================ -->
-      <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="why">
+      <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="context">
         <div class="slide-inner-center">
         <span class="section-number">01</span>
-        <h2>Why This Talk</h2>
-        <p class="section-desc">Context &amp; Motivation</p>
+        <h2>Why This Moment Matters</h2>
+        <p class="section-desc">Production feedback as the engine of open-source maturity</p>
         </div>
       </section>
 
       <section>
-        <h2>The Gluten Moment</h2>
+        <h2>Why This Moment Matters</h2>
         <blockquote>
-          <strong>On February 18, 2026</strong>, Apache Gluten graduated from incubation to become an <strong>ASF Top-Level Project</strong> — validating the vision of native execution for Spark at scale.
+          <strong>February 18, 2026</strong> — Apache Gluten graduated to an <strong>ASF Top-Level Project</strong>.
+          <span class="ref"><a href="https://incubator.apache.org/projects/gluten.html">incubator.apache.org/projects/gluten</a></span>
         </blockquote>
-        <p style="margin-top:20px;">Microsoft has been part of this journey — as a <strong>production user</strong>, an <strong>upstream contributor</strong>, and a <strong>PMC participant</strong>.</p>
-        <div class="three-col" style="margin-top:25px;">
+        <div class="thesis-box" style="margin-top:15px;">
+          <strong>Our thesis:</strong> Open-source projects mature fastest when production feedback loops are tight. At Fabric scale, we find bugs, semantic gaps, and performance cliffs orders of magnitude faster — and upstream them the same sprint. That's why Gluten graduated, and why Velox is becoming the standard.
+        </div>
+        <div class="three-col" style="margin-top:15px;">
           <div class="metric-card">
             <span class="metric-value">🏭</span>
-            <span class="metric-label" style="font-size:1.1em; font-weight:600; color:#323130;">Production User</span>
-            <p style="margin-top:10px; color:#605E5C;">Fabric NEE at scale</p>
+            <span class="metric-label" style="font-size:1em; font-weight:600;">Production User</span>
+            <p style="margin-top:4px; color:#605E5C; font-size:0.85em;">Fabric NEE at scale</p>
           </div>
           <div class="metric-card green">
             <span class="metric-value">🔧</span>
-            <span class="metric-label" style="font-size:1.1em; font-weight:600; color:#323130;">Upstream Contributor</span>
-            <p style="margin-top:10px; color:#605E5C;">Gluten + Velox + Spark</p>
+            <span class="metric-label" style="font-size:1em; font-weight:600;">Upstream Contributor</span>
+            <p style="margin-top:4px; color:#605E5C; font-size:0.85em;">Gluten + Velox + Spark</p>
           </div>
           <div class="metric-card purple">
             <span class="metric-value">🌍</span>
-            <span class="metric-label" style="font-size:1.1em; font-weight:600; color:#323130;">Community Partner</span>
-            <p style="margin-top:10px; color:#605E5C;">PMC &amp; committer seat</p>
+            <span class="metric-label" style="font-size:1em; font-weight:600;">Community Partner</span>
+            <p style="margin-top:4px; color:#605E5C; font-size:0.85em;">PMC &amp; committer seat</p>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>What You'll Take Away</h2>
-        <div class="persona-card">
-          <h4>🏗️ For Platform Engineers</h4>
-          <p>How Microsoft deployed Gluten + Velox in production — what worked, what broke, and how we hardened it.</p>
-        </div>
-        <div class="persona-card green">
-          <h4>🔧 For Contributors</h4>
-          <p>Concrete examples of upstream contributions across three projects (Spark, Gluten, Velox) — and how production use drives open-source design.</p>
-        </div>
-        <div class="persona-card purple">
-          <h4>📊 For Decision Makers</h4>
-          <p>How Fabric's Native Execution Engine delivers up to 6× Spark performance at <strong>no additional cost</strong> — powered by the same open-source stack.</p>
+        <h2>The Choice We Faced</h2>
+        <p>Fabric runs Spark at massive scale. We needed dramatic speedups — <strong>no application rewrites</strong>, <strong>no extra cost</strong>.</p>
+        <table style="margin-top:12px;">
+          <thead>
+            <tr><th>Approach</th><th>Why Not</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Build from scratch</td><td>Years of effort, no community leverage</td></tr>
+            <tr><td>Fork Spark + custom codegen</td><td>Diverges from upstream, maintenance burden</td></tr>
+            <tr><td>Proprietary native engine</td><td>Closed ecosystem, limited upstream leverage</td></tr>
+            <tr style="background:#EBF3FB;"><td><strong>Gluten + Velox ✓</strong></td><td>Community-driven, proven at Meta scale, modular architecture</td></tr>
+          </tbody>
+        </table>
+        <div class="thesis-box" style="margin-top:12px;">
+          <strong>The flywheel:</strong> Deploy in production → find issues at scale → fix upstream → Fabric gets upstream improvements → repeat. Every cycle makes both the open-source project and the product better.
         </div>
       </section>
 
       <!-- ============================================================ -->
-      <!-- SECTION 2: ARCHITECTURE -->
+      <!-- SLIDE 6: ARCHITECTURE IN PRACTICE -->
       <!-- ============================================================ -->
       <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="architecture">
         <div class="slide-inner-center">
         <span class="section-number">02</span>
-        <h2>Gluten + Velox Architecture</h2>
-        <p class="section-desc">How It Works</p>
+        <h2>Architecture in Practice</h2>
+        <p class="section-desc">How Gluten offloads Spark to Velox — concretely</p>
         </div>
       </section>
 
       <section>
-        <h2>Architecture at a Glance</h2>
-        <div class="arch-diagram">
-          <div class="arch-layer spark">
-            <strong>Apache Spark</strong> — Distributed Control Flow, Scheduling, APIs, Fault Tolerance
+        <h2>Execution Flow: Spark → Gluten → Velox</h2>
+        <div class="arch-diagram" style="padding:18px;">
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:center;">
+            <div class="flow-step" style="flex:1; min-width:140px;">
+              <strong>Spark Logical Plan</strong><br>
+              <span style="font-size:0.82em;">Catalyst optimizer, AQE, CBO — unchanged</span>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step active" style="flex:1; min-width:140px;">
+              <strong>Gluten Intercept</strong><br>
+              <span style="font-size:0.82em;">Physical plan → Substrait IR via JNI</span>
+            </div>
+            <div class="flow-arrow">→</div>
+            <div class="flow-step" style="flex:1.2; min-width:160px; border-color:var(--ms-accent-green); background:#E8F5E9;">
+              <strong>Velox Execution</strong><br>
+              <span style="font-size:0.82em;">Vectorized C++ · SIMD · Columnar · Off-heap</span>
+            </div>
           </div>
-          <div class="arch-arrow">▼ Spark Physical Plan</div>
-          <div class="arch-layer gluten">
-            <strong>Apache Gluten</strong> — Plan Translation (Substrait IR) → JNI Bridge<br>
-            <span style="font-size:0.85em; opacity:0.8;">Spark Plugin API — no code changes required</span>
-          </div>
-          <div class="arch-arrow">▼ Native Execution</div>
-          <div class="arch-layer native">
-            <strong>Velox</strong> — Vectorized C++ Engine (Meta)<br>
-            <span style="font-size:0.85em;">Columnar batches · SIMD · Off-heap memory · Zero GC</span>
-          </div>
-          <div style="margin-top:10px; font-size:0.9em; color:#605E5C;">
-            Data Format: <strong>Apache Arrow ColumnarBatch</strong> · Fallback: <strong>ColumnarToRow / RowToColumnar</strong>
+          <div style="margin-top:12px; font-size:0.88em; color:#605E5C; display:flex; align-items:center; gap:8px; justify-content:center;">
+            <span>Unsupported op? → <strong>Graceful fallback</strong>: VeloxColumnarToRowExec → JVM Spark → RowToVeloxColumnar</span>
           </div>
         </div>
-      </section>
-
-      <section>
-        <h2>Why This Design Wins</h2>
-        <table>
-          <thead>
-            <tr><th>Design Principle</th><th>Benefit</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>Reuse Spark's Control Plane</strong></td><td>Keep scheduling, shuffle service, fault tolerance, APIs — no migration</td></tr>
-            <tr><td><strong>Offload Compute to Native</strong></td><td>Vectorized C++ with SIMD — 2–6× faster on same hardware</td></tr>
-            <tr><td><strong>Substrait as IR</strong></td><td>Cross-engine plan representation — portable, extensible</td></tr>
-            <tr><td><strong>Graceful Fallback</strong></td><td>Unsupported ops run on JVM Spark — no query failures</td></tr>
-            <tr><td><strong>Plugin API</strong></td><td>Zero code changes — just configure <code>spark.plugins</code></td></tr>
-          </tbody>
-        </table>
-        <blockquote style="margin-top:15px;">
-          <strong>Key insight:</strong> Gluten doesn't replace Spark — it makes Spark's hot path native while preserving everything else.
-        </blockquote>
+        <h3 style="margin-top:15px;">Concrete Example: TPC-DS Q1 with Fallback</h3>
+        <pre style="font-size:0.78em; padding:14px;"><code>== Physical Plan (with Gluten) ==
+VeloxColumnarToRowExec                          ← fallback boundary
+  +- ^(2) ProjectExecTransformer [...]          ← NATIVE: projection
+    +- ^(2) ShuffledHashJoinExecTransformer [...]← NATIVE: hash join
+      :- ^(1) InputIteratorTransformer [...]
+      :  +- ShuffleQueryStage [...]
+      :    +- ColumnarExchange [...]            ← NATIVE: columnar shuffle
+      :      +- ^(0) FilterExecTransformer [...] ← NATIVE: filter
+      :        +- ^(0) NativeFileScan parquet   ← NATIVE: scan with pushdown</code></pre>
+        <p style="font-size:0.85em; margin-top:8px;">Nodes suffixed <code>Transformer</code> / <code>NativeFileScan</code> run in Velox. Fallback at <code>VeloxColumnarToRowExec</code> boundaries.</p>
       </section>
 
       <!-- ============================================================ -->
-      <!-- SECTION 3: MICROSOFT'S JOURNEY -->
-      <!-- ============================================================ -->
-      <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="ms-journey">
-        <div class="slide-inner-center">
-        <span class="section-number">03</span>
-        <h2>Microsoft's Journey</h2>
-        <p class="section-desc">Why We Bet on Native Execution</p>
-        </div>
-      </section>
-
-      <section>
-        <h2>The Scale Challenge</h2>
-        <p><strong>Microsoft Fabric</strong> runs Apache Spark at massive scale for data engineering, data science, and analytics workloads across millions of users.</p>
-        <div class="metric-grid" style="margin-top:20px;">
-          <div class="metric-card">
-            <span class="metric-value">🔥</span>
-            <span class="metric-label" style="font-size:1em; font-weight:600;">Growing Data Volumes</span>
-          </div>
-          <div class="metric-card green">
-            <span class="metric-value">⏱️</span>
-            <span class="metric-label" style="font-size:1em; font-weight:600;">Tighter SLAs</span>
-          </div>
-          <div class="metric-card purple">
-            <span class="metric-value">💰</span>
-            <span class="metric-label" style="font-size:1em; font-weight:600;">Cost Pressure</span>
-          </div>
-          <div class="metric-card orange">
-            <span class="metric-value">🔧</span>
-            <span class="metric-label" style="font-size:1em; font-weight:600;">Zero Code Changes</span>
-          </div>
-        </div>
-        <blockquote style="margin-top:20px;">
-          We needed to make Spark dramatically faster — <strong>without breaking existing workloads</strong> and <strong>without additional cost</strong> to customers.
-        </blockquote>
-      </section>
-
-      <section>
-        <h2>Why Gluten + Velox?</h2>
-        <p style="margin-bottom:15px;">We evaluated multiple approaches before committing to Gluten + Velox:</p>
-        <table>
-          <thead>
-            <tr><th>Approach</th><th>Pros</th><th>Cons</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>Build from scratch</strong></td><td>Full control</td><td>Years of effort, no community leverage</td></tr>
-            <tr><td><strong>Fork Spark + custom codegen</strong></td><td>Quick wins</td><td>Maintenance burden, diverges from upstream</td></tr>
-            <tr><td><strong>Proprietary native engine</strong></td><td>Differentiation</td><td>Vendor lock-in, no ecosystem</td></tr>
-            <tr style="background:#EBF3FB;"><td><strong>Gluten + Velox (chosen)</strong></td><td>Community-driven, proven at Meta scale, modular</td><td>Contribution model required</td></tr>
-          </tbody>
-        </table>
-        <blockquote style="margin-top:15px;">
-          <strong>Decision:</strong> Invest in open-source, contribute upstream, and differentiate in Fabric's integration layer.
-        </blockquote>
-      </section>
-
-      <section>
-        <h2>The Flywheel: Production → Upstream → Product</h2>
-        <div class="arch-diagram">
-          <div style="display:flex; align-items:center; justify-content:center; gap:20px; flex-wrap:wrap;">
-            <div class="arch-layer gluten" style="flex:1; min-width:200px;">
-              <strong>1. Deploy in Production</strong><br>
-              <span style="font-size:0.85em;">Find bugs, gaps, perf issues at Fabric scale</span>
-            </div>
-            <div style="font-size:2em; color:#0078D4;">→</div>
-            <div class="arch-layer native" style="flex:1; min-width:200px;">
-              <strong>2. Fix Upstream</strong><br>
-              <span style="font-size:0.85em;">Contribute to Gluten, Velox, and Spark</span>
-            </div>
-            <div style="font-size:2em; color:#0078D4;">→</div>
-            <div class="arch-layer spark" style="flex:1; min-width:200px;">
-              <strong>3. Ship in Fabric</strong><br>
-              <span style="font-size:0.85em;">NEE gets upstream improvements automatically</span>
-            </div>
-          </div>
-        </div>
-        <blockquote style="margin-top:15px;">
-          <strong>This virtuous cycle ensures that lessons learned in production feed back into open-source design — rather than remaining platform-specific.</strong>
-        </blockquote>
-      </section>
-
-      <!-- ============================================================ -->
-      <!-- SECTION 4: PRODUCTION EXPERIENCE -->
+      <!-- SLIDE 8: PRODUCTION WAR STORIES -->
       <!-- ============================================================ -->
       <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="production">
         <div class="slide-inner-center">
-        <span class="section-number">04</span>
-        <h2>Production Experience</h2>
-        <p class="section-desc">Challenges at Scale</p>
+        <span class="section-number">03</span>
+        <h2>Production War Stories</h2>
+        <p class="section-desc">What broke, what we learned, what we upstreamed</p>
         </div>
       </section>
 
       <section>
-        <h2>What Worked Well</h2>
+        <h2>The Memory War: 9 Months to Fix OOM</h2>
         <div class="two-col">
           <div>
-            <div class="persona-card green">
-              <h4>✅ Drop-In Acceleration</h4>
-              <p>Existing Spark jobs ran faster with <code>spark.native.enabled=true</code> — no rewrites needed.</p>
-            </div>
-            <div class="persona-card green">
-              <h4>✅ Broad Operator Coverage</h4>
-              <p>Scans, filters, projections, aggregations, joins, sorts — the hot path was native from day one.</p>
+            <h3 style="color:var(--ms-accent-red);">The Problem</h3>
+            <p>Early 2025: TPC-DS queries that should take 5 minutes crash with OOM after 90 seconds. Spark's JVM on-heap allocator and Velox's off-heap allocator competed for the same RAM — neither knew about the other.</p>
+            <div class="lesson-card" style="margin-top:12px;">
+              <h4>Root Cause</h4>
+              <p style="font-size:0.9em;">No unified memory accounting across JVM and native heaps. Velox allocated aggressively; Spark GC couldn't reclaim fast enough.</p>
             </div>
           </div>
           <div>
-            <div class="persona-card green">
-              <h4>✅ Significant Speedups</h4>
-              <p>Up to <strong>6× end-to-end</strong> on TPC-DS SF1000. Compute-intensive queries saw the biggest gains.</p>
-            </div>
-            <div class="persona-card green">
-              <h4>✅ Graceful Fallback</h4>
-              <p>Unsupported operators fall back to JVM Spark transparently — no query failures.</p>
+            <h3 style="color:var(--ms-accent-green);">The Fix &amp; Impact</h3>
+            <p>9 months of work: built dynamic memory negotiation between JVM and Velox — smart reservation, release, and spill triggers.</p>
+            <div class="metric-grid" style="grid-template-columns: 1fr 1fr; gap:10px; margin-top:12px;">
+              <div class="metric-card green">
+                <span class="metric-value">↓ 70%</span>
+                <span class="metric-label">OOM incidents</span>
+                <span class="ref">After Gluten 1.3.0 (Jan 2025)</span>
+              </div>
+              <div class="metric-card">
+                <span class="metric-value">→ Upstream</span>
+                <span class="metric-label">Fabric + Gluten community</span>
+                <span class="ref"><a href="https://blog.fabric.microsoft.com/en-us/blog/faster-data-processing-with-native-execution-engines-in-microsoft-fabric-runtime-1-3-efficient-memory-management-explained/">Runtime 1.3 Memory Blog</a></span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <section>
-        <h2>Challenges We Faced</h2>
+        <h2>More Production Lessons</h2>
         <table>
           <thead>
-            <tr><th>Challenge</th><th>What Happened</th><th>How We Addressed It</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Correctness</strong></td>
-              <td>Subtle differences in null handling, cast semantics, and edge cases between Spark and Velox</td>
-              <td>Extensive testing + upstream fixes (e.g., <code>assert_not_null</code>, <code>collect_set</code> null behavior)</td>
-            </tr>
-            <tr>
-              <td><strong>Fallback Behavior</strong></td>
-              <td>Excessive ColumnarToRow/RowToColumnar transitions degraded performance</td>
-              <td>Fallback advisor in Spark UI + dynamic filter pushdown to reduce transitions</td>
-            </tr>
-            <tr>
-              <td><strong>Memory Management</strong></td>
-              <td>JVM on-heap vs. Velox off-heap competition caused OOM</td>
-              <td>Dynamic memory negotiation — OOM issues dropped 70% after Gluten 1.3.0</td>
-            </tr>
-            <tr>
-              <td><strong>Security Integration</strong></td>
-              <td>Native code paths needed to honor Fabric's security model</td>
-              <td>JNI bridge security validation + sandboxed native execution</td>
-            </tr>
-            <tr>
-              <td><strong>Operational Stability</strong></td>
-              <td>Native crashes harder to diagnose than JVM exceptions</td>
-              <td>Enhanced diagnostics, query trace, Spark Advisor fallback alerts</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section>
-        <h2>Workload Patterns That Benefit Most</h2>
-        <div class="comparison-grid">
-          <div class="comparison-card highlight">
-            <h4>🟢 Great for Native Execution</h4>
-            <ul>
-              <li><strong>Complex aggregations</strong> — GROUP BY with many expressions</li>
-              <li><strong>Multi-way joins</strong> — hash joins, broadcast joins</li>
-              <li><strong>Heavy filtering &amp; projections</strong> — columnar + SIMD shines</li>
-              <li><strong>Parquet / Delta reads</strong> — native scan with pushdown</li>
-              <li><strong>Compute-intensive ETL</strong> — CPU-bound transformations</li>
-            </ul>
-          </div>
-          <div class="comparison-card">
-            <h4>⚠️ Consider Carefully</h4>
-            <ul>
-              <li><strong>I/O-bound scans</strong> — limited compute to accelerate</li>
-              <li><strong>UDF-heavy workloads</strong> — Python/Java UDFs run on JVM</li>
-              <li><strong>Unsupported ops</strong> — frequent fallbacks add overhead</li>
-              <li><strong>Small datasets</strong> — overhead may exceed savings</li>
-              <li><strong>Streaming workloads</strong> — support still maturing</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============================================================ -->
-      <!-- SECTION 5: UPSTREAM CONTRIBUTIONS -->
-      <!-- ============================================================ -->
-      <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="contributions">
-        <div class="slide-inner-center">
-        <span class="section-number">05</span>
-        <h2>Upstream Contributions</h2>
-        <p class="section-desc">What Microsoft Contributed Back</p>
-        </div>
-      </section>
-
-      <section>
-        <h2>Contributing Across Three Projects</h2>
-        <p>Microsoft's upstream work spans <strong>Apache Spark</strong>, <strong>Apache Gluten</strong>, and <strong>Velox</strong> — driven by production needs at Fabric scale.</p>
-        <div class="arch-diagram">
-          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
-            <div class="arch-layer spark">
-              <strong>Apache Spark</strong><br>
-              <span style="font-size:0.85em;">Runtime compatibility, API evolution</span>
-            </div>
-            <div class="arch-layer gluten">
-              <strong>Apache Gluten</strong><br>
-              <span style="font-size:0.85em;">Plan translation, fallback, Spark version support</span>
-            </div>
-            <div class="arch-layer native">
-              <strong>Velox</strong><br>
-              <span style="font-size:0.85em;">Expression coverage, null semantics, performance</span>
-            </div>
-          </div>
-        </div>
-        <blockquote style="margin-top:15px;">
-          Every bug found in Fabric production that has an upstream root cause becomes an <strong>upstream contribution</strong> — reducing long-term maintenance cost and benefiting the entire community.
-        </blockquote>
-      </section>
-
-      <section>
-        <h2>Contributions to Apache Gluten</h2>
-        <table>
-          <thead>
-            <tr><th>Area</th><th>Examples</th><th>Impact</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Spark 4.x Compatibility</strong></td>
-              <td>Fixed TPC-DS traits, enabled 8 disabled test suites (#11816, #11550)</td>
-              <td>Gluten ready for next-gen Spark</td>
-            </tr>
-            <tr>
-              <td><strong>Plan Translation</strong></td>
-              <td>Propagated <code>LOGICAL_PLAN_TAG</code> through offload rules (#11833) — 150/150 tests pass</td>
-              <td>Correct plan metadata across native boundary</td>
-            </tr>
-            <tr>
-              <td><strong>Dynamic Filters</strong></td>
-              <td>Push dynamic filters down to ValueStream (#11657)</td>
-              <td>Reduced fallback transitions</td>
-            </tr>
-            <tr>
-              <td><strong>Expression Coverage</strong></td>
-              <td>Spark <code>AssertNotNull</code> → Velox <code>assert_not_null</code> (#11685)</td>
-              <td>Fewer fallbacks for nullable expressions</td>
-            </tr>
-            <tr>
-              <td><strong>TLP Graduation</strong></td>
-              <td>Removed incubating refs, updated CI/release scripts (#11737–#11742)</td>
-              <td>Clean TLP transition</td>
-            </tr>
-            <tr>
-              <td><strong>Maintenance</strong></td>
-              <td>Spark 3.2 shim cleanup (#11687), GPU code cleanup (#11824)</td>
-              <td>Reduced codebase complexity</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section>
-        <h2>Contributions to Velox</h2>
-        <p style="margin-bottom:10px;">Velox README lists Microsoft as a <strong>development partner</strong>. Our contributions focus on Spark function correctness and performance.</p>
-        <table>
-          <thead>
-            <tr><th>Area</th><th>Examples</th><th>Impact</th></tr>
+            <tr><th>Challenge</th><th>What Happened</th><th>Upstream Fix</th></tr>
           </thead>
           <tbody>
             <tr>
               <td><strong>Null Semantics</strong></td>
-              <td><code>collect_list</code> RESPECT NULLS (#16328), <code>collect_set</code> RESPECT NULLS (#16416), default null fix (#16947)</td>
-              <td>Spark-compatible aggregate behavior</td>
+              <td>Spark's <code>collect_set</code> includes nulls by default; Velox excluded them → silent data diffs</td>
+              <td>Velox <a href="https://github.com/facebookincubator/velox/pull/16416">#16416</a>, <a href="https://github.com/facebookincubator/velox/pull/16947">#16947</a></td>
             </tr>
             <tr>
-              <td><strong>Expression Coverage</strong></td>
-              <td>Lambda index support for <code>filter(array, (x,i) → …)</code> (#16334), <code>assert_not_null</code> (#16562)</td>
-              <td>Broader Spark function parity</td>
+              <td><strong>Fallback Storms</strong></td>
+              <td>One unsupported expression triggered ColumnarToRow for entire subtree → slower than pure JVM</td>
+              <td>Dynamic filter pushdown <a href="https://github.com/apache/gluten/pull/11657">#11657</a>, Spark Advisor alerts</td>
             </tr>
             <tr>
-              <td><strong>Aggregate Framework</strong></td>
-              <td><code>setConstantInputs</code> hook for aggregates (#16624)</td>
-              <td>Extensible aggregate initialization</td>
+              <td><strong>Security Boundary</strong></td>
+              <td>Native scan paths must honor Row-Level &amp; Column-Level Security policies</td>
+              <td>JNI bridge security enforcement in Fabric NEE (details in NEE section)</td>
             </tr>
             <tr>
-              <td><strong>Performance</strong></td>
-              <td>Removed FlatNoNulls batch-size limit (#16607)</td>
-              <td>Better throughput for large batches</td>
+              <td><strong>Diagnostics</strong></td>
+              <td>Native SIGSEGV crashes → no JVM stack trace, hard to triage</td>
+              <td>Query trace, Spark Advisor, native crash symbolication</td>
             </tr>
           </tbody>
         </table>
-        <blockquote style="margin-top:15px;">
-          Several Velox PRs explicitly note: <em>"This change was needed by Gluten"</em> — demonstrating the tight feedback loop between production use and upstream improvements.
-        </blockquote>
-      </section>
-
-      <section>
-        <h2>The Contribution Model</h2>
-        <div class="two-col">
-          <div>
-            <h3>How Production Drives Upstream</h3>
-            <div class="timeline">
-              <div class="timeline-item">
-                <div class="timeline-date">Discover</div>
-                <div class="timeline-content">Bug or gap found in Fabric production workloads</div>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-date">Analyze</div>
-                <div class="timeline-content">Root-cause to Gluten, Velox, or Spark layer</div>
-              </div>
-              <div class="timeline-item">
-                <div class="timeline-date">Fix Upstream</div>
-                <div class="timeline-content">Submit PR to the appropriate open-source project</div>
-              </div>
-              <div class="timeline-item milestone">
-                <div class="timeline-date">Ship</div>
-                <div class="timeline-content">Fabric picks up the fix via upstream sync</div>
-              </div>
-            </div>
-          </div>
-          <div>
-            <h3>Key Microsoft Contributors</h3>
-            <div class="persona-card">
-              <h4>Apache Gluten</h4>
-              <p>Wei-Ting Chen (PMC), Chang Chen, Ankita Victor, Kent Yao, Chungmin Lee</p>
-            </div>
-            <div class="persona-card green">
-              <h4>Velox</h4>
-              <p>Kent Yao, Zhli — Spark function parity, performance</p>
-            </div>
-            <div class="persona-card purple">
-              <h4>Apache Spark</h4>
-              <p>Long-standing contributions to Spark runtime, Catalyst optimizer, and compatibility</p>
-            </div>
-          </div>
+        <div class="thesis-box" style="margin-top:10px;">
+          Every row above became an <strong>upstream PR or a Fabric-specific hardening</strong>. Production is the fastest test suite in open source.
         </div>
       </section>
 
       <!-- ============================================================ -->
-      <!-- SECTION 6: FABRIC NEE -->
+      <!-- SLIDE 11: UPSTREAM CONTRIBUTIONS -->
+      <!-- ============================================================ -->
+      <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="contributions">
+        <div class="slide-inner-center">
+        <span class="section-number">04</span>
+        <h2>Upstream Contributions</h2>
+        <p class="section-desc">Semantic Parity · Fallback Reduction · Performance</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Contribution Themes: Discovery → Upstream → Ship</h2>
+        <p style="margin-bottom:12px;">Microsoft contributes across <strong>Apache Spark</strong>, <strong>Apache Gluten</strong>, and <strong>Velox</strong>
+          <span class="ref">Velox README lists Microsoft as a <a href="https://github.com/facebookincubator/velox#development">development partner</a></span>
+        </p>
+        <table style="font-size:0.88em;">
+          <thead>
+            <tr><th>Theme</th><th>Problem Found in Production</th><th>Upstream Fix (Exemplar PRs)</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>🎯 Semantic Parity</strong></td>
+              <td>Null handling diffs between Spark &amp; Velox broke TPC-DS correctness</td>
+              <td>
+                Velox: <code>collect_list</code>/<code>collect_set</code> RESPECT NULLS <a href="https://github.com/facebookincubator/velox/pull/16328">#16328</a> <a href="https://github.com/facebookincubator/velox/pull/16416">#16416</a><br>
+                Gluten: <code>assert_not_null</code> translation <a href="https://github.com/apache/gluten/pull/11685">#11685</a><br>
+                Velox: lambda index <code>filter(array,(x,i)→…)</code> <a href="https://github.com/facebookincubator/velox/pull/16334">#16334</a>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>🔄 Fallback Reduction</strong></td>
+              <td>Excessive ColumnarToRow transitions from unsupported expressions</td>
+              <td>
+                Gluten: dynamic filter pushdown <a href="https://github.com/apache/gluten/pull/11657">#11657</a><br>
+                Gluten: <code>LOGICAL_PLAN_TAG</code> propagation <a href="https://github.com/apache/gluten/pull/11833">#11833</a> (150/150 tests)<br>
+                Velox: <code>setConstantInputs</code> aggregate hook <a href="https://github.com/facebookincubator/velox/pull/16624">#16624</a>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>⚡ Performance &amp; Scale</strong></td>
+              <td>Batch-size limits &amp; Spark 4.x readiness gaps</td>
+              <td>
+                Velox: removed FlatNoNulls batch-size limit <a href="https://github.com/facebookincubator/velox/pull/16607">#16607</a><br>
+                Gluten: Spark 4.x — 8 test suites enabled <a href="https://github.com/apache/gluten/pull/11816">#11816</a> (<a href="https://github.com/apache/gluten/issues/11550">#11550</a>)
+              </td>
+            </tr>
+            <tr>
+              <td><strong>🎓 TLP Graduation</strong></td>
+              <td>Post-graduation repo cleanup needed</td>
+              <td>
+                Gluten: removed incubating refs, CI/release updates <a href="https://github.com/apache/gluten/pull/11737">#11737</a>–<a href="https://github.com/apache/gluten/pull/11742">#11742</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- ============================================================ -->
+      <!-- SLIDE 13: FABRIC NEE -->
       <!-- ============================================================ -->
       <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="nee">
         <div class="slide-inner-center">
-        <span class="section-number">06</span>
+        <span class="section-number">05</span>
         <h2>Fabric Native Execution Engine</h2>
-        <p class="section-desc">Differentiation at Microsoft</p>
+        <p class="section-desc">What production feedback looks like at Microsoft scale</p>
         </div>
       </section>
 
       <section>
-        <h2>What Is NEE?</h2>
-        <p>The <strong>Native Execution Engine (NEE)</strong> is Microsoft Fabric's integration of Gluten + Velox — available to all Fabric Spark users at <strong>no additional cost</strong>.</p>
-        <div class="arch-diagram">
-          <div class="arch-layer spark">
-            <strong>Fabric Spark Runtime 1.3</strong> — Spark 3.5 + Delta Lake 3.2 + Fabric Extensions
-          </div>
-          <div class="arch-arrow">▼</div>
-          <div class="arch-layer gluten">
-            <strong>Native Execution Engine</strong> — Gluten + Velox (C++ Vectorized)
-          </div>
-          <div class="arch-arrow">▼</div>
-          <div class="arch-layer native">
-            <strong>OneLake</strong> — Unified Lakehouse Storage (Delta / Parquet)
-          </div>
-        </div>
-        <div style="text-align:center; margin-top:15px;">
-          <code style="background:#EBF3FB; padding:8px 20px; border-radius:8px; font-size:1.1em;">spark.native.enabled = true</code>
-        </div>
-      </section>
-
-      <section>
-        <h2>NEE Performance Results</h2>
-        <div class="metric-grid">
-          <div class="metric-card">
-            <span class="metric-value">~4×</span>
-            <span class="metric-label">Faster on TPC-DS 1TB</span>
-          </div>
-          <div class="metric-card green">
-            <span class="metric-value">Up to 6×</span>
-            <span class="metric-label">End-to-End on Production Jobs</span>
-          </div>
-          <div class="metric-card purple">
-            <span class="metric-value">~83%</span>
-            <span class="metric-label">Compute Cost Savings</span>
-          </div>
-          <div class="metric-card orange">
-            <span class="metric-value">$0</span>
-            <span class="metric-label">Additional Cost</span>
-          </div>
-        </div>
-        <blockquote style="margin-top:20px;">
-          <strong>TPC-DS SF1000 (Delta format):</strong> Up to 6× faster vs. open-source Spark on a fixed Fabric cluster — translating to ~83% compute-cost savings. No extra charge — same Spark credit rates apply.
-        </blockquote>
-      </section>
-
-      <section>
-        <h2>How NEE Differs from OSS Gluten</h2>
-        <div class="comparison-grid">
-          <div class="comparison-card">
-            <h4>Open-Source Gluten</h4>
-            <ul>
-              <li>Manual build &amp; deployment</li>
-              <li>User manages Velox libs</li>
-              <li>Community support</li>
-              <li>DIY configuration tuning</li>
-              <li>Standard Spark monitoring</li>
-            </ul>
-          </div>
-          <div class="comparison-card highlight">
-            <h4>Fabric NEE</h4>
-            <ul>
-              <li><strong>Pre-integrated</strong> in Fabric Runtime</li>
-              <li>One toggle: <code>spark.native.enabled</code></li>
-              <li><strong>Enterprise support</strong> &amp; SLAs</li>
-              <li><strong>Fabric-tuned defaults</strong> for Delta/OneLake</li>
-              <li><strong>Spark Advisor</strong> — real-time fallback alerts</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <h2>Fabric-Specific Optimizations</h2>
-        <table>
-          <thead>
-            <tr><th>Optimization</th><th>Description</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>V-Order</strong></td><td>Default columnar sorting for Parquet/Delta — optimized read patterns for analytical queries</td></tr>
-            <tr><td><strong>OneLake Integration</strong></td><td>Unified lakehouse storage with optimized I/O paths for native scans</td></tr>
-            <tr><td><strong>Native Delta Write</strong></td><td>Accelerated Delta write path — bypassing JVM serialization</td></tr>
-            <tr><td><strong>Deletion Vectors</strong></td><td>Native support for Delta deletion vectors — efficient row-level deletes</td></tr>
-            <tr><td><strong>Optimized Snapshots</strong></td><td>Driver-side Delta snapshot management — faster metadata operations</td></tr>
-            <tr><td><strong>Dynamic Memory Manager</strong></td><td>Runtime 1.3 — smart JVM/native memory negotiation — fewer OOMs</td></tr>
-            <tr><td><strong>Z-Order / Liquid Clustering</strong></td><td>NEE-aware data layout optimizations for faster scans</td></tr>
-          </tbody>
-        </table>
-        <blockquote style="margin-top:10px;">
-          These Fabric-specific enhancements compose with upstream Gluten/Velox improvements — the best of both worlds.
-        </blockquote>
-      </section>
-
-      <section>
-        <h2>Observability &amp; Developer Experience</h2>
+        <h2>NEE: Gluten + Velox, Productionized</h2>
         <div class="two-col">
           <div>
-            <h3>Spark Advisor — Fallback Alerts</h3>
-            <p>Real-time, in-context alerts when operators fall back from native to JVM execution.</p>
-            <ul>
-              <li>Shows which operator fell back and <strong>why</strong></li>
-              <li>Suggests alternatives (e.g., <code>.collect()</code> vs <code>.show()</code>)</li>
-              <li>Helps users keep queries fully native</li>
-            </ul>
+            <div class="arch-diagram" style="margin:0;">
+              <div class="arch-layer spark">
+                <strong>Fabric Runtime 1.3</strong><br><span style="font-size:0.85em;">Spark 3.5 · Delta Lake 3.2</span>
+              </div>
+              <div class="arch-arrow">▼</div>
+              <div class="arch-layer gluten">
+                <strong>NEE</strong> — Gluten + Velox (C++)
+              </div>
+              <div class="arch-arrow">▼</div>
+              <div class="arch-layer native">
+                <strong>OneLake</strong> — Delta / Parquet
+              </div>
+            </div>
+            <div style="text-align:center; margin-top:10px;">
+              <code style="background:#EBF3FB; padding:6px 16px; border-radius:8px;">spark.native.enabled = true</code>
+            </div>
           </div>
           <div>
-            <h3>Execution Visibility</h3>
+            <div class="metric-grid" style="grid-template-columns: 1fr 1fr; gap:10px;">
+              <div class="metric-card">
+                <span class="metric-value">~4×</span>
+                <span class="metric-label">TPC-DS SF1000</span>
+                <span class="ref"><span class="internal-badge">Internal Testing</span></span>
+              </div>
+              <div class="metric-card green">
+                <span class="metric-value">Up to 6×</span>
+                <span class="metric-label">End-to-End</span>
+                <span class="ref"><a href="https://blog.fabric.microsoft.com/en-us/blog/microsoft-fabric-spark-native-execution-engine-now-generally-available/">GA Blog</a></span>
+              </div>
+              <div class="metric-card purple">
+                <span class="metric-value">~83%</span>
+                <span class="metric-label">Cost Savings</span>
+                <span class="ref"><a href="https://blog.fabric.microsoft.com/en-us/blog/under-the-hood-an-introduction-to-the-native-execution-engine-for-microsoft-fabric/">Under the Hood</a></span>
+              </div>
+              <div class="metric-card orange">
+                <span class="metric-value">Included</span>
+                <span class="metric-label">In Fabric Runtime</span>
+                <span class="ref"><a href="https://blog.fabric.microsoft.com/en-us/blog/native-execution-engine-available-at-no-additional-cost/">No Extra Cost</a></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Fabric-Specific Extensions on Top of OSS Gluten</h2>
+        <table>
+          <thead>
+            <tr><th>Category</th><th>Feature</th><th>How It Works</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td rowspan="2"><strong>🔐 Security</strong></td>
+              <td><strong>Row-Level Security (RLS)</strong></td>
+              <td>Policy predicates injected at the native scan layer before Velox processes any rows — enforced via JNI bridge before plan translation</td>
+            </tr>
+            <tr>
+              <td><strong>Column-Level Security (CLS)</strong></td>
+              <td>Column masking rules applied during Substrait plan generation — masked columns never reach Velox in cleartext</td>
+            </tr>
+            <tr>
+              <td rowspan="2"><strong>🐍 UDF Support</strong></td>
+              <td><strong>Python UDF</strong></td>
+              <td>Arrow-based columnar transfer via <code>ArrowEvalPython</code> — data stays columnar across JVM↔Python boundary, avoiding Row conversion</td>
+            </tr>
+            <tr>
+              <td><strong>Scala UDF</strong></td>
+              <td>JNI-bridged execution with native columnar input — supported UDF classes run without ColumnarToRow transition</td>
+            </tr>
+            <tr>
+              <td rowspan="3"><strong>⚡ Performance</strong></td>
+              <td><strong>Memory Management</strong></td>
+              <td>Dynamic reservation/release between JVM &amp; Velox allocators — listens to GC pressure signals, triggers native spill before OOM
+                <span class="ref"><a href="https://blog.fabric.microsoft.com/en-us/blog/faster-data-processing-with-native-execution-engines-in-microsoft-fabric-runtime-1-3-efficient-memory-management-explained/">Runtime 1.3 Blog</a></span>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Spill-to-Disk</strong></td>
+              <td>Optimized off-heap spill paths — sorted spill with compression, async I/O, graceful degradation under pressure instead of OOM</td>
+            </tr>
+            <tr>
+              <td><strong>Hash Probe Optimization</strong></td>
+              <td>Improved hash join probe: prefetch-friendly memory layout for build-side hash table, reduced cache misses on large joins</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Delta &amp; Storage Optimizations + Observability</h2>
+        <div class="two-col">
+          <div>
+            <h3>Delta &amp; Storage</h3>
+            <table style="font-size:0.85em;">
+              <tbody>
+                <tr><td><strong>V-Order</strong></td><td>Default columnar sorting for optimized analytical reads
+                  <span class="ref"><a href="https://learn.microsoft.com/fabric/data-engineering/delta-optimization-and-v-order">Docs</a></span>
+                </td></tr>
+                <tr><td><strong>Native Delta Write</strong></td><td>Bypass JVM serialization for write path
+                  <span class="ref"><a href="https://blog.fabric.microsoft.com/en-us/blog/microsoft-fabric-spark-native-execution-engine-now-generally-available/">GA Blog</a></span>
+                </td></tr>
+                <tr><td><strong>Deletion Vectors</strong></td><td>Native row-level deletes without rewrite</td></tr>
+                <tr><td><strong>Z-Order &amp; Liquid Clustering</strong></td><td>NEE-optimized data layouts for predicate pushdown
+                  <span class="ref"><a href="https://learn.microsoft.com/fabric/data-engineering/native-execution-engine-z-order-liquid-clustering">Docs</a></span>
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div>
+            <h3>Observability</h3>
             <ul>
-              <li><strong>Spark UI:</strong> "Gluten SQL / DataFrame" tab showing native vs. JVM nodes</li>
-              <li><strong>DataFrame explain:</strong> See <code>Transformer</code>, <code>NativeFileScan</code>, <code>VeloxColumnarToRowExec</code></li>
-              <li><strong>Spark History Server:</strong> Post-hoc analysis of native execution</li>
-              <li><strong>Run Series:</strong> Compare before/after enabling NEE</li>
+              <li><strong>Spark Advisor</strong> — real-time fallback alerts: shows <em>which</em> operator, <em>why</em>, and <em>what to change</em>
+                <span class="ref"><a href="https://learn.microsoft.com/fabric/data-engineering/spark-advisor-introduction">Docs</a></span>
+              </li>
+              <li><strong>Gluten SQL tab</strong> — native vs. JVM node visibility in Spark UI</li>
+              <li><strong>Run Series</strong> — before/after NEE comparison
+                <span class="ref"><a href="https://learn.microsoft.com/fabric/data-engineering/apache-spark-monitor-run-series">Docs</a></span>
+              </li>
+              <li><strong>NEE Overview</strong> — full documentation
+                <span class="ref"><a href="https://learn.microsoft.com/fabric/data-engineering/native-execution-engine-overview">Learn</a></span>
+              </li>
             </ul>
           </div>
         </div>
       </section>
 
       <!-- ============================================================ -->
-      <!-- SECTION 7: GRADUATION & LESSONS -->
+      <!-- SLIDE 18: GRADUATION & ROADMAP -->
       <!-- ============================================================ -->
       <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="graduation">
         <div class="slide-inner-center">
-        <span class="section-number">07</span>
-        <h2>Graduation &amp; Lessons</h2>
-        <p class="section-desc">Becoming an ASF Top-Level Project</p>
+        <span class="section-number">06</span>
+        <h2>Graduation &amp; Roadmap</h2>
+        <p class="section-desc">TLP Lessons &amp; 2026 Outlook</p>
         </div>
       </section>
 
       <section>
-        <h2>Gluten's Path to TLP</h2>
-        <div class="timeline">
-          <div class="timeline-item">
-            <div class="timeline-date">2022 Q1</div>
-            <div class="timeline-content">Intel &amp; Kyligence create Gluten — first public release</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-date">Dec 2023</div>
-            <div class="timeline-content">Entered Apache Incubator — 200 stars, 30+ contributors</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-date">Sep 2024</div>
-            <div class="timeline-content">Release 1.2.0 — first official Apache release</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-date">2024–2025</div>
-            <div class="timeline-content"><strong>Microsoft joins</strong> — production deployment, upstream contributions begin</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-date">Jan 2025</div>
-            <div class="timeline-content">Release 1.3.0 — OOM issues ↓ 70%, memory management overhaul</div>
-          </div>
-          <div class="timeline-item">
-            <div class="timeline-date">Oct 2025</div>
-            <div class="timeline-content">Release 1.5.0 — 1,000+ GitHub stars, 10+ contributing companies</div>
-          </div>
-          <div class="timeline-item milestone">
-            <div class="timeline-date">Feb 18, 2026</div>
-            <div class="timeline-content">🎓 <strong>Graduated as Apache TLP</strong> — 1,500+ stars, ~194 contributors, 6K+ commits</div>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <h2>Lessons from the Journey</h2>
+        <h2>Gluten's TLP Journey &amp; Lessons</h2>
         <div class="two-col">
           <div>
-            <div class="lesson-card">
-              <h4>🏛️ Governance > Code</h4>
-              <p>ASF requires diverse PMC. Early on, 90% of contributions came from one company. Graduation required deliberate diversification.</p>
-            </div>
-            <div class="lesson-card">
-              <h4>🧠 Memory Is the Hardest Problem</h4>
-              <p>Spark on-heap vs. Velox off-heap competed for RAM. Dynamic negotiation took 9 months — but dropped OOM issues by 70%.</p>
+            <div class="timeline" style="font-size:0.88em;">
+              <div class="timeline-item">
+                <div class="timeline-date">2022 Q1</div>
+                <div class="timeline-content">Intel &amp; Kyligence create Gluten</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-date">Dec 2023</div>
+                <div class="timeline-content">Entered Apache Incubator</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-date">2024–25</div>
+                <div class="timeline-content"><strong>Microsoft joins</strong> — production + contributions</div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-date">Jan 2025</div>
+                <div class="timeline-content">v1.3.0 — OOM ↓ 70%</div>
+              </div>
+              <div class="timeline-item milestone">
+                <div class="timeline-date">Feb 18, 2026</div>
+                <div class="timeline-content">🎓 <strong>Apache TLP</strong> — 1,500+ ★, ~194 contribs
+                  <span class="ref"><a href="https://incubator.apache.org/projects/gluten.html">ASF Status</a></span>
+                </div>
+              </div>
             </div>
           </div>
           <div>
-            <div class="lesson-card">
-              <h4>🔄 Production Feedback Is Gold</h4>
-              <p>Bugs found at Fabric scale — null handling, cast semantics, edge cases — directly shaped upstream design decisions.</p>
+            <div class="lesson-card" style="margin-top:0;">
+              <h4>🏛️ Governance > Code</h4>
+              <p style="font-size:0.88em;">ASF demands diverse PMC. Graduation required deliberate multi-company diversification.</p>
             </div>
             <div class="lesson-card">
-              <h4>🤝 Multi-Company = Resilience</h4>
-              <p>Microsoft, Meta, Intel, Kyligence, BIGO, Meituan, Alibaba — diverse contributors make the project stronger.</p>
+              <h4>🧠 Memory: The Hardest Problem</h4>
+              <p style="font-size:0.88em;">JVM vs. native off-heap — 9 months to build dynamic negotiation. OOM dropped 70%.</p>
+            </div>
+            <div class="lesson-card">
+              <h4>🔄 Production → Upstream → Graduation</h4>
+              <p style="font-size:0.88em;">Bugs at Fabric scale directly shaped Gluten &amp; Velox design — making the project mature enough to graduate.</p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- ============================================================ -->
-      <!-- SECTION 8: ROADMAP -->
-      <!-- ============================================================ -->
-      <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="roadmap">
-        <div class="slide-inner-center">
-        <span class="section-number">08</span>
-        <h2>2026 Roadmap</h2>
-        <p class="section-desc">What's Next for Gluten + Velox</p>
+      <section>
+        <h2>2026 Roadmap &amp; Microsoft Focus</h2>
+        <div class="two-col">
+          <div>
+            <h3>Gluten Community Roadmap</h3>
+            <table style="font-size:0.85em;">
+              <thead>
+                <tr><th>Q</th><th>Ver</th><th>Highlights</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Q1</td><td>1.6.0</td><td>Post-grad cleanup, Spark 4.0 beta</td></tr>
+                <tr><td>Q2</td><td>1.7.0</td><td>Multi-core, PySpark UDF</td></tr>
+                <tr><td>Q3</td><td>1.8.0</td><td>Flink PoC, GPU exploration</td></tr>
+                <tr><td>Q4</td><td>2.0.0</td><td>Spark 4.0 GA, new backends</td></tr>
+              </tbody>
+            </table>
+            <span class="ref"><a href="https://github.com/apache/gluten/issues/11827">Roadmap: Issue #11827</a></span>
+          </div>
+          <div>
+            <h3>Microsoft Focus Areas</h3>
+            <div class="persona-card" style="margin-top:0;">
+              <h4>🔧 Spark Compatibility</h4>
+              <p style="font-size:0.88em;">Spark 4.x, ANSI mode, TIMESTAMP_NTZ, function coverage</p>
+            </div>
+            <div class="persona-card green">
+              <h4>⚡ Performance</h4>
+              <p style="font-size:0.88em;">Dynamic filters, join optimization, memory &amp; spill</p>
+            </div>
+            <div class="persona-card purple">
+              <h4>🏢 Enterprise</h4>
+              <p style="font-size:0.88em;">Streaming, complex types, variant shredding</p>
+            </div>
+          </div>
+        </div>
+        <div class="thesis-box" style="margin-top:12px;">
+          Every Spark function Velox learns is another query Fabric can accelerate natively. We're doubling down on <strong>Spark-Velox as the standard</strong> for analytical compute.
         </div>
       </section>
 
-      <section>
-        <h2>Gluten 2026 Roadmap</h2>
-        <table>
-          <thead>
-            <tr><th>Initiative</th><th>Description</th><th>Microsoft Aligned?</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>Spark 4.0 / 4.1 GA</strong></td><td>Full compatibility with next-gen Spark — API migration, TPCDS validation</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">✅ Fabric</span></td></tr>
-            <tr><td><strong>TIMESTAMP_NTZ</strong></td><td>Native timezone-free timestamp support</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">✅ Fabric</span></td></tr>
-            <tr><td><strong>ANSI Mode</strong></td><td>Strict ANSI SQL compliance for enterprise workloads</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">✅ Fabric</span></td></tr>
-            <tr><td><strong>Variant Shredding</strong></td><td>Efficient semi-structured data processing</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">✅ Fabric</span></td></tr>
-            <tr><td><strong>Parquet Type Widening</strong></td><td>Schema evolution without rewriting data</td><td></td></tr>
-            <tr><td><strong>Remaining Spark Functions</strong></td><td>Close the gap on Spark SQL function coverage</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">✅ Fabric</span></td></tr>
-            <tr><td><strong>Dynamic Filter → Shuffle Reader</strong></td><td>Runtime filters pushed to shuffle readers for late materialization</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">✅ Fabric</span></td></tr>
-            <tr><td><strong>Velox Official Release</strong></td><td>Upstream Velox version pinning for stable dependency management</td><td><span style="background:#E8F4FD;padding:2px 8px;border-radius:4px;font-size:0.85em;">✅ Fabric</span></td></tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section>
-        <h2>Release Plan — 2026</h2>
-        <table>
-          <thead>
-            <tr><th>Quarter</th><th>Version</th><th>Highlights</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>Q1</strong></td><td>1.6.0</td><td>Post-graduation cleanup, Spark 4.0 beta</td></tr>
-            <tr><td><strong>Q2</strong></td><td>1.7.0</td><td>Multi-core execution, PySpark UDF support</td></tr>
-            <tr><td><strong>Q3</strong></td><td>1.8.0</td><td>Flink PoC, GPU backend exploration</td></tr>
-            <tr><td><strong>Q4</strong></td><td>2.0.0</td><td>Major release — Spark 4.0 GA, new backends</td></tr>
-          </tbody>
-        </table>
-
-        <h3 style="margin-top:25px;">Microsoft's Focus Areas for 2026</h3>
-        <div class="three-col">
-          <div class="persona-card">
-            <h4>🔧 Spark Compatibility</h4>
-            <p>Spark 4.x support, ANSI mode, function coverage</p>
-          </div>
-          <div class="persona-card green">
-            <h4>⚡ Performance</h4>
-            <p>Dynamic filters, join optimization, memory efficiency</p>
-          </div>
-          <div class="persona-card purple">
-            <h4>🏢 Enterprise Features</h4>
-            <p>Streaming support, complex types, observability</p>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <h2>The Bigger Picture: Velox Ecosystem</h2>
-        <p>Gluten + Velox is part of a broader movement — VeloxCon 2026 showcases the growing ecosystem:</p>
-        <table>
-          <thead>
-            <tr><th>Ecosystem</th><th>Examples from VeloxCon 2026</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>Spark + Velox</strong></td><td>Gluten (Microsoft, community), Meta's Spark/Velox, Velox Reader</td></tr>
-            <tr><td><strong>Presto + Velox</strong></td><td>Prestissimo migration at Meta, Uber's 90% Velox migration</td></tr>
-            <tr><td><strong>AI + Velox</strong></td><td>Vector search, RAG on Velox, AI-powered UDF Veloxification</td></tr>
-            <tr><td><strong>Hardware + Velox</strong></td><td>GPU acceleration (DataPelago), CXL memory, hardware co-design</td></tr>
-            <tr><td><strong>Beyond SQL</strong></td><td>Postgres-compatible OLAP, Cypher graph queries, geospatial</td></tr>
-          </tbody>
-        </table>
-        <blockquote style="margin-top:15px;">
-          Velox is becoming the <strong>shared execution substrate</strong> for analytical compute — and Gluten is the bridge that connects it to Spark.
-        </blockquote>
-      </section>
-
       <!-- ============================================================ -->
-      <!-- SECTION 9: Q&A -->
+      <!-- Q&A + CLOSING -->
       <!-- ============================================================ -->
       <section class="section-divider" data-background-gradient="linear-gradient(135deg, #0078D4 0%, #886CE4 100%)" data-section="qa">
-        <div class="slide-inner-center">
-        <span class="section-number">09</span>
+        <div class="slide-inner-center align-center">
+        <span class="section-number">07</span>
         <h2>Q &amp; A</h2>
-        <p class="section-desc">Let's Discuss</p>
+        <p class="section-desc" style="margin-top:20px; font-size:1.1em;">If you're building on Velox — ship it to production.<br>We'll find the bugs together.</p>
         </div>
       </section>
 
-      <!-- ============================================================ -->
-      <!-- CLOSING SLIDE -->
-      <!-- ============================================================ -->
       <section class="ending-slide" data-background-gradient="linear-gradient(135deg, #0078D4, #003D6B)" data-section="closing">
         <div class="slide-inner-center align-center">
           <h2>Thank You!</h2>
-          <p style="font-size:1.3em; margin:20px 0;">From Incubation to ASF Top-Level:<br>The Apache Gluten Journey with Velox at Microsoft</p>
-          <div style="margin:30px 0; opacity:0.9;">
+          <p style="font-size:1.2em; margin:20px 0;">From Incubation to ASF Top-Level:<br>The Apache Gluten Journey with Velox at Microsoft</p>
+          <div style="margin:20px 0; opacity:0.9;">
             <p><strong>William Chen</strong> · Apache Gluten PMC · Microsoft</p>
             <p><strong>Ajith Shetty</strong> · Microsoft</p>
           </div>
-          <div style="margin-top:30px;">
+          <div style="margin-top:20px;">
             <p>🔗 <a href="https://github.com/apache/gluten">github.com/apache/gluten</a></p>
             <p>🔗 <a href="https://github.com/facebookincubator/velox">github.com/facebookincubator/velox</a></p>
             <p>🔗 <a href="https://learn.microsoft.com/fabric/data-engineering/native-execution-engine-overview">Fabric NEE Documentation</a></p>
           </div>
-          <div class="slide-footer" style="position:relative; bottom:auto; left:auto; right:auto; justify-content:center; border-top:1px solid rgba(255,255,255,0.2); padding-top:15px; margin-top:30px;">
+          <div class="slide-footer" style="position:relative; bottom:auto; left:auto; right:auto; justify-content:center; border-top:1px solid rgba(255,255,255,0.2); padding-top:12px; margin-top:20px;">
             <span style="color:rgba(255,255,255,0.6);">VeloxCon 2026 · April 30 · Meta HQ, Menlo Park</span>
           </div>
         </div>
